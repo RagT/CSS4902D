@@ -92,19 +92,73 @@ BlueLevel.prototype.draw = function () {
 // The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 BlueLevel.prototype.update = function () {
-    var deltaX = 0.05;
+    var delta = 3;
+   
+   //First make red rectangle complete one revolution every 5 seconds
+    var redXform = this.mSqSet[1].getXform();
+    var timeSinceLastUpdate = (Date.now() - this.timeOfLastUpdate) / 1000;
+    this.timeOfLastUpdate = Date.now();
 
-    /// Move right and swap ovre
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
-
-    }
-
-    // Step A: test for white square movement
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
-
+    redXform.incRotationByDegree(72 * timeSinceLastUpdate);
+    
+    //Make white rectangle move 20 units every 3 seconds
+    var whiteXform = this.mSqSet[0].getXform();
+    
+    
+    if(whiteXform.getXPos() < 10) {
+        whiteXform.setXPos(30);
+    } else {
+        whiteXform.incXPosBy(-20/3 * timeSinceLastUpdate);
     }
     
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Q)) {
+    var smallViewport = this.mCamera2.getViewport();
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W)) {
+        smallViewport[1] += delta;
+        this.mCamera2.setViewport(smallViewport);
+    }
+
+    if (gEngine.Input.isKeyReleased(gEngine.Input.keys.A)) {
+        smallViewport[0] -= 15;
+        this.mCamera2.setViewport(smallViewport);
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.S)) {
+        smallViewport[1] -= delta;
+        this.mCamera2.setViewport(smallViewport);
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.D)) {
+        smallViewport[0] += delta;
+        this.mCamera2.setViewport(smallViewport);
+    }
+    var WCCenter = this.mCamera.getWCCenter();
+    var worldDelta = 0.25;
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.F)) {
+        this.mCamera.setWCCenter(WCCenter[0], WCCenter[1] - worldDelta);
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
+        this.mCamera.setWCCenter(WCCenter[0] + worldDelta, WCCenter[1]);
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.V)) {
+        this.mCamera.setWCCenter(WCCenter[0], WCCenter[1] + worldDelta); 
+    }
+  
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.B)) {
+        this.mCamera.setWCCenter(WCCenter[0] - worldDelta, WCCenter[1]); 
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
+        this.mCamera.setWCWidth(this.mCamera.getWCWidth() - worldDelta);
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
+        this.mCamera.setWCWidth(this.mCamera.getWCWidth() + worldDelta);
+    }
+    
+    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
         gEngine.GameLoop.stop();
     }
 };

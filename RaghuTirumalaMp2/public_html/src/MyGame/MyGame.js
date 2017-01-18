@@ -136,33 +136,29 @@ MyGame.prototype.update = function () {
         this.mCamera2.setViewport(smallViewport);
     }
     var WCCenter = this.mCamera.getWCCenter();
-    
+    var worldDelta = 0.25;
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.F)) {
-        WCCenter[1] += delta;
-        this.mCamera.setWCCenter();
+        this.mCamera.setWCCenter(WCCenter[0], WCCenter[1] - worldDelta);
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.C)) {
-        WCCenter[0] -= delta;
-        this.mCamera.setWCCenter();
+        this.mCamera.setWCCenter(WCCenter[0] + worldDelta, WCCenter[1]);
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.V)) {
-        WCCenter[1] -= delta;
-        this.mCamera.setWCCenter();
+        this.mCamera.setWCCenter(WCCenter[0], WCCenter[1] + worldDelta); 
     }
   
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.B)) {
-        WCCenter[0] += delta;
-        this.mCamera.setWCCenter(WCCenter);
+        this.mCamera.setWCCenter(WCCenter[0] - worldDelta, WCCenter[1]); 
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
-        this.mCamera.setWCWidth(this.mCamera.getWCWidth() - 1);
+        this.mCamera.setWCWidth(this.mCamera.getWCWidth() - worldDelta);
     }
     
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
-        this.mCamera.setWCWidth(this.mCamera.getWCWidth() + 1);
+        this.mCamera.setWCWidth(this.mCamera.getWCWidth() + worldDelta);
     }
     
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
