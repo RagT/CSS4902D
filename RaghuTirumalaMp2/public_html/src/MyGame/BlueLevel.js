@@ -46,7 +46,7 @@ BlueLevel.prototype.unloadScene = function () {
 };
 
 BlueLevel.prototype.initialize = function () {
-    var sceneParser = new SceneFileParser(this.kSceneFile);
+    var sceneParser = new SceneFileParser(this.kSceneFile, "XML");
 
     // Step A: Read in the camera
     this.mCamera = sceneParser.parseCamera();

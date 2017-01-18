@@ -48,7 +48,7 @@ gEngine.Input = (function () {
         R : 82,
         S : 83,
         W : 87,
-
+        Q : 81,
         LastKeyCode: 222
     };
 
