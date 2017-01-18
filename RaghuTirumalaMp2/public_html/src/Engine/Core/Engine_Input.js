@@ -37,6 +37,8 @@ gEngine.Input = (function () {
 
         // Alphabets
         A : 65,
+        B : 66,
+        C : 67,
         D : 68,
         E : 69,
         F : 70,
@@ -45,10 +47,13 @@ gEngine.Input = (function () {
         J : 74,
         K : 75,
         L : 76,
+        Q : 81,
         R : 82,
         S : 83,
+        V : 86,
         W : 87,
-        Q : 81,
+        X : 88,
+        Z : 90,
         LastKeyCode: 222
     };
 
@@ -109,6 +114,7 @@ gEngine.Input = (function () {
         update: update,
         isKeyPressed: isKeyPressed,
         isKeyClicked: isKeyClicked,
+        isKeyReleased: isKeyReleased,
         keys: kKeys
     };
     return mPublic;

@@ -87,6 +87,19 @@ gEngine.ResourceMap = (function () {
         }
         return c;
     };
+    
+    var loadCam2ViewPort= function(fileName) {
+        if (!(isAssetLoaded(fileName))){
+            asyncLoadRequested(fileName);
+            var c = [20, 340, 100, 100];
+            asyncLoadCompleted(fileName, c);
+        }
+    };
+    
+    var unloadCam2ViewPort = function(fileName, c){
+        asyncLoadCompleted(fileName, c);
+        gEngine.ResourceMap.unloadAsset(fileName);
+    };
     //</editor-fold>
 
     // Public interface for this object. Anything not in here will
@@ -101,7 +114,9 @@ gEngine.ResourceMap = (function () {
         retrieveAsset: retrieveAsset,
         unloadAsset: unloadAsset,
         isAssetLoaded: isAssetLoaded,
-        incAssetRefCount: incAssetRefCount
+        incAssetRefCount: incAssetRefCount,
+        loadCam2ViewPort: loadCam2ViewPort,
+        unloadCam2ViewPort: unloadCam2ViewPort
         //</editor-fold>
     };
     return mPublic;

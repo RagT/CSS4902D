@@ -7,6 +7,7 @@
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
+//Takes in the file path for the scene as well as the filetype (XML or JSON)
 function SceneFileParser(sceneFilePath, resourceType) {
     this.mScene = gEngine.ResourceMap.retrieveAsset(sceneFilePath);
     this.mResourceType = resourceType;
@@ -21,7 +22,7 @@ SceneFileParser.prototype._getElm = function (tagElm) {
         }
     }
     if(this.mResourceType === "JSON") {
-        var sceneInfo = JSON.parse(mScene);
+        var sceneInfo = JSON.parse(this.mScene);
         theElm = sceneInfo[tagElm];
         if(theElm.length === 0) {
             console.error("Warning: Level element:[" + tagElm + "]: is not found!");
@@ -45,7 +46,7 @@ SceneFileParser.prototype.parseCamera = function () {
         viewport = camElm[0].getAttribute("Viewport").split(" ");
         bgColor = camElm[0].getAttribute("BgColor").split(" ");
         
-        // make sure viewport and color are number
+         // make sure viewport and color are number
         var j;
         for (j = 0; j < 4; j++) {
             bgColor[j] = Number(bgColor[j]);
@@ -56,10 +57,9 @@ SceneFileParser.prototype.parseCamera = function () {
         cx = camElm.Center[0];
         cy = camElm.Center[1];
         w = camElm.Width;
-        viewport = camElm.ViewPort;
+        viewport = camElm.Viewport;
         bgColor = camElm.BgColor;
     }
-
 
     var cam = new Camera(
         vec2.fromValues(cx, cy),  // position of the camera
@@ -81,7 +81,13 @@ SceneFileParser.prototype.parseSquares = function (sqSet) {
             h = Number(elm.item(i).attributes.getNamedItem("Height").value);
             r = Number(elm.item(i).attributes.getNamedItem("Rotation").value);
             c = elm.item(i).attributes.getNamedItem("Color").value.split(" ");
+            
             sq = new Renderable(gEngine.DefaultResources.getConstColorShader());
+            sq.setColor(c);
+            sq.getXform().setPosition(x, y);
+            sq.getXform().setRotationInDegree(r); // In Degree
+            sq.getXform().setSize(w, h);
+            sqSet.push(sq); 
         }
         // make sure color array contains numbers
         for (j = 0; j < 4; j++) {
@@ -96,12 +102,14 @@ SceneFileParser.prototype.parseSquares = function (sqSet) {
             h = elm[i].Height;
             r = elm[i].Rotation;
             c = elm[i].Color;
+            
+            sq = new Renderable(gEngine.DefaultResources.getConstColorShader());
+            sq.setColor(c);
+            sq.getXform().setPosition(x, y);
+            sq.getXform().setRotationInDegree(r); // In Degree
+            sq.getXform().setSize(w, h);
+            sqSet.push(sq); 
         }
     }
-
-    sq.setColor(c);
-    sq.getXform().setPosition(x, y);
-    sq.getXform().setRotationInDegree(r); // In Degree
-    sq.getXform().setSize(w, h);
-    sqSet.push(sq);    
+       
 };

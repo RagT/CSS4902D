@@ -45,6 +45,7 @@ Camera.prototype.setWCCenter = function (xPos, yPos) {
 };
 Camera.prototype.getWCCenter = function () { return this.mWCCenter; };
 Camera.prototype.setWCWidth = function (width) { this.mWCWidth = width; };
+Camera.prototype.getWCWidth = function () {return this.mWCWidth};
 
 Camera.prototype.setViewport = function (viewportArray) { this.mViewport = viewportArray; };
 Camera.prototype.getViewport = function () { return this.mViewport; };

@@ -11,7 +11,6 @@
 function BlueLevel() {
     // audio clips: supports both mp3 and wav formats
     this.kBgClip = "assets/sounds/BGClip.mp3";
-    this.kCue = "assets/sounds/BlueLevel_cue.wav";
 
     // scene file name
     this.kSceneFile = "assets/BlueLevel.xml";
@@ -20,6 +19,12 @@ function BlueLevel() {
 
     // The camera to view the scene
     this.mCamera = null;
+    
+    this.timeOfLastUpdate = Date.now();
+    
+    this.cam2Viewport = "cam2Viewport";
+    //smaller camera
+    this.mCamera2 = null;
 }
 gEngine.Core.inheritPrototype(BlueLevel, Scene);
 
@@ -29,28 +34,33 @@ BlueLevel.prototype.loadScene = function () {
 
     // loads the audios
     gEngine.AudioClips.loadAudio(this.kBgClip);
-    gEngine.AudioClips.loadAudio(this.kCue);
+    gEngine.ResourceMap.loadCam2ViewPort(this.cam2Viewport);
 };
 
 BlueLevel.prototype.unloadScene = function () {
     // stop the background audio
     gEngine.AudioClips.stopBackgroundAudio();
 
-    // unload the scene flie and loaded resources
+    // unload the scene file and loaded resources
     gEngine.TextFileLoader.unloadTextFile(this.kSceneFile);
     gEngine.AudioClips.unloadAudio(this.kBgClip);
-    gEngine.AudioClips.unloadAudio(this.kCue);
-
+    
+    gEngine.ResourceMap.loadCam2ViewPort(this.cam2Viewport, this.mCamera2.getViewport());
     var nextLevel = new MyGame();  // load the next level
     gEngine.Core.startScene(nextLevel);
 };
 
 BlueLevel.prototype.initialize = function () {
     var sceneParser = new SceneFileParser(this.kSceneFile, "XML");
-
+    var smallViewport = gEngine.ResourceMap.retrieveAsset(this.cam2Viewport);
     // Step A: Read in the camera
     this.mCamera = sceneParser.parseCamera();
-
+        this.mCamera2 = new Camera(
+        vec2.fromValues(20, 60),  // position of the camera
+        20,                        // width of camera
+        smallViewport                  // viewport (orgX, orgY, width, height)
+        );
+    this.mCamera2.setBackgroundColor([0.27, 0.81, 0.83, 1]);    
     // Step B: Read all the squares
     sceneParser.parseSquares(this.mSqSet);
 
@@ -72,30 +82,29 @@ BlueLevel.prototype.draw = function () {
     for (i = 0; i < this.mSqSet.length; i++) {
         this.mSqSet[i].draw(this.mCamera.getVPMatrix());
     }
+    
+    this.mCamera2.setupViewProjection();
+    for(var i = 0; i < this.mSqSet.length; i++) {
+        this.mSqSet[i].draw(this.mCamera.getVPMatrix());
+    }
 };
 
 // The update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 BlueLevel.prototype.update = function () {
-    // For this very simple game, let's move the first square
-    var xform = this.mSqSet[1].getXform();
     var deltaX = 0.05;
 
     /// Move right and swap ovre
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)) {
-        gEngine.AudioClips.playACue(this.kCue);
-        xform.incXPosBy(deltaX);
-        if (xform.getXPos() > 30) { // this is the right-bound of the window
-            xform.setPosition(12, 60);
-        }
+
     }
 
     // Step A: test for white square movement
     if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)) {
-        gEngine.AudioClips.playACue(this.kCue);
-        xform.incXPosBy(-deltaX);
-        if (xform.getXPos() < 11) { // this is the left-boundary
-            gEngine.GameLoop.stop();
-        }
+
+    }
+    
+    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Q)) {
+        gEngine.GameLoop.stop();
     }
 };
