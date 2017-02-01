@@ -78,7 +78,7 @@ MyGame.prototype.initialize = function () {
             boundPos[0].toPrecision(4) + " " + boundPos[1].toPrecision(4) +") Size=(" 
             + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
     var camWidth = 150 * aspectRatio + 40;
-    var textH = 5 * aspectRatio;
+    var textH = 5.5 * aspectRatio;
     this._initText(this.mTextSysFont, 50 - camWidth/2 + 10, 50 - camWidth/2 + 10, [0, 0, 0, 1], textH);
 };
 
