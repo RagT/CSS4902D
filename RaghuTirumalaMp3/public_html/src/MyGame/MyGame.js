@@ -67,7 +67,7 @@ MyGame.prototype.initialize = function () {
     //Set up the cameras
     this.mCamera = new Camera(
         vec2.fromValues(50, 50),   // position of the camera
-        150 * aspectRatio + 20,                       // width of camera
+        150 * aspectRatio + 40,                       // width of camera
         [160, 0, 480, 480]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
@@ -77,7 +77,9 @@ MyGame.prototype.initialize = function () {
     this.mTextSysFont = new FontRenderable("Status:Bound Pos=(" + 
             boundPos[0].toPrecision(4) + " " + boundPos[1].toPrecision(4) +") Size=(" 
             + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
-    this._initText(this.mTextSysFont, -100, -100, [0, 0, 0, 1], 10);
+    var camWidth = 150 * aspectRatio + 40;
+    var textH = 5 * aspectRatio;
+    this._initText(this.mTextSysFont, 50 - camWidth/2 + 10, 50 - camWidth/2 + 10, [0, 0, 0, 1], textH);
 };
 
 MyGame.prototype._initText = function (font, posX, posY, color, textH) {
