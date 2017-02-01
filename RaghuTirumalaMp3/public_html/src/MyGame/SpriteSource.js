@@ -48,6 +48,22 @@ SpriteSource.prototype.getAspectRatio = function() {
     return this.aspectRatio;
 };
 
+//Returns an array of bounds of the sprite source object
+//[minX, maxX, miny, maxY]
+SpriteSource.prototype.getBounds= function() {
+    var centerX = this.sourceRenderable.getXform().getXPos();
+    var centerY = this.sourceRenderable.getXform().getYPos();
+    var width = this.sourceRenderable.getXform().getWidth();
+    var height = this.sourceRenderable.getXform().getHeight();
+    
+    var bounds = [];
+    bounds.push(centerX - (width / 2));
+    bounds.push(centerX + (width / 2));
+    bounds.push(centerY - (height / 2));
+    bounds.push(centerY + (height / 2));
+    return bounds;
+};
+
 //draws SpriteSource using the passed camera
 SpriteSource.prototype.draw = function(camera) {
     var vpMatrix = camera.getVPMatrix();

@@ -45,7 +45,8 @@ MyGame.prototype.initialize = function () {
     //Create SpriteSource Renderable
     this.mSpriteSource = new SpriteSource(this.kMinionSprite, 50, 50);
     //Create InteractiveBound renderable
-    this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50);
+    this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50,
+    this.mSpriteSource.getBounds());
     
     //Aspect ratio of sprite source image
     var aspectRatio = this.mSpriteSource.getAspectRatio();
@@ -99,4 +100,70 @@ MyGame.prototype.update = function () {
     this.mTextSysFont.setText("Status:Bound Pos=(" + 
             boundPos[0].toPrecision(4) + " " + boundPos[1].toPrecision(4) +") Size=(" 
             + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
+    
+    var delta = 2;
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.W)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incYPos(delta / 100);
+        } else {
+            this.mInteractiveBound.incYPos(delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.A)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incXPos(-delta / 100);
+        } else {
+            this.mInteractiveBound.incXPos(-delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.S)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incYPos(-delta / 100);
+        } else {
+            this.mInteractiveBound.incYPos(-delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.D)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incXPos(delta / 100);
+        } else {
+            this.mInteractiveBound.incXPos(delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incHeight(delta / 100);
+        } else {
+            this.mInteractiveBound.incHeight(delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incWidth(-delta / 100);
+        } else {
+            this.mInteractiveBound.incWidth(-delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incWidth(delta / 100);
+        } else {
+            this.mInteractiveBound.incWidth(delta);
+        }
+    }
+    
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)){
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
+            this.mInteractiveBound.incHeight(-delta / 100);
+        } else {
+            this.mInteractiveBound.incHeight(-delta);
+        }
+    }
 };

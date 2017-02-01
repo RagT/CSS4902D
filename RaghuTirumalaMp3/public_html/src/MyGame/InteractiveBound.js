@@ -6,8 +6,11 @@
 
 //Initialize bound with starting coordinates wcX and wcY and image
 //to render.
-function InteractiveBound(image, wcX, wcY) {
+function InteractiveBound(image, wcX, wcY, bounds) {
     var startingSize = 50; //Starting bound size in WC units
+    
+    //Array of bounding coordinates for scaling/moving bound
+    this.sourceBounds = bounds;
     
     //Initialize bound sprite
     this.boundRenderable = new SpriteRenderable(image);
@@ -33,6 +36,10 @@ function InteractiveBound(image, wcX, wcY) {
     this.bottomSquare = new Renderable();
     this.bottomSquare.setColor([0,0.5,0.5,1]);
     this.bottomSquare.getXform().setSize(squareSize,squareSize);
+    
+    this.minWidth = 0;
+    
+    this.minHeight = 0;
 }
 
 InteractiveBound.prototype.getPosition = function() {
@@ -48,6 +55,64 @@ InteractiveBound.prototype.getSize = function() {
     sizeArr.push(this.boundRenderable.getXform().getHeight());
     return sizeArr;
 }; 
+
+InteractiveBound.prototype.incXPos = function(delta) {
+    var bounds = this.getBounds();
+    if(bounds[0] + delta > this.sourceBounds[0] && 
+            bounds[1] + delta < this.sourceBounds[1]) {
+        this.boundRenderable.getXform().incXPosBy(delta);
+    }
+};
+
+InteractiveBound.prototype.incYPos = function(delta) {
+    var bounds = this.getBounds();
+    if(bounds[2] + delta > this.sourceBounds[2] && 
+            bounds[3] + delta < this.sourceBounds[3]) {
+        this.boundRenderable.getXform().incYPosBy(delta);
+    }
+};
+
+InteractiveBound.prototype.incWidth = function(delta) {
+    var bounds = this.getBounds();
+    var width = bounds[1] - bounds[0];
+    
+    if(bounds[0] - delta < this.sourceBounds[0] ||
+            bounds[1] + delta > this.sourceBounds[1]) {
+        return;
+    }
+    if((delta + width) > this.minWidth) {
+        this.boundRenderable.getXform().incWidthBy(delta);
+    }
+};
+
+InteractiveBound.prototype.incHeight = function(delta) {
+    var bounds = this.getBounds();
+    var height = bounds[3] - bounds[2];
+    
+    if(bounds[2] - delta < this.sourceBounds[2] ||
+            bounds[3] + delta > this.sourceBounds[3]) {
+        return;
+    }
+    if((delta + height) > this.minHeight) {
+        this.boundRenderable.getXform().incHeightBy(delta);
+    }
+};
+
+//Returns an array of bounds of the InteractiveBound object
+//[minX, maxX, miny, maxY]
+InteractiveBound.prototype.getBounds = function() {
+    var centerX = this.boundRenderable.getXform().getXPos();
+    var centerY = this.boundRenderable.getXform().getYPos();
+    var width = this.boundRenderable.getXform().getWidth();
+    var height = this.boundRenderable.getXform().getHeight();
+    
+    var bounds = [];
+    bounds.push(centerX - (width / 2));
+    bounds.push(centerX + (width / 2));
+    bounds.push(centerY - (height / 2));
+    bounds.push(centerY + (height / 2));
+    return bounds;
+};
 
 InteractiveBound.prototype.draw = function(camera) {
     vpMatrix = camera.getVPMatrix();
