@@ -23,7 +23,7 @@ function MyGame() {
     // Sprite source and Interactive bound
     this.mSpriteSource = null;
     this.mInteractiveBound = null;
-
+    
     this.mTextSysFont = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -46,7 +46,7 @@ MyGame.prototype.initialize = function () {
     this.mSpriteSource = new SpriteSource(this.kMinionSprite, 50, 50);
     //Create InteractiveBound renderable
     this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50,
-    this.mSpriteSource.getBounds());
+    this.mSpriteSource.getBounds(), false);
     
     //Aspect ratio of sprite source image
     var aspectRatio = this.mSpriteSource.getAspectRatio();
@@ -166,4 +166,9 @@ MyGame.prototype.update = function () {
             this.mInteractiveBound.incHeight(-delta);
         }
     }
+    
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
+        this.mInteractiveBound.togglePreview();
+        console.log("Q clicked");
+    } 
 };

@@ -6,8 +6,9 @@
 
 //Initialize bound with starting coordinates wcX and wcY and image
 //to render.
-function InteractiveBound(image, wcX, wcY, bounds) {
+function InteractiveBound(image, wcX, wcY, bounds, isPreview) {
     var startingSize = 50; //Starting bound size in WC units
+    this.isPreview = isPreview;
     
     //Array of bounding coordinates for scaling/moving bound
     this.sourceBounds = bounds;
@@ -17,7 +18,7 @@ function InteractiveBound(image, wcX, wcY, bounds) {
     this.boundRenderable.setColor([0,0,0,0]);
     this.boundRenderable.getXform().setPosition(wcX,wcY);
     this.boundRenderable.getXform().setSize(startingSize,startingSize);
-    
+   
     var squareSize = 5;
     
     //Bound Marker Squares
@@ -40,6 +41,20 @@ function InteractiveBound(image, wcX, wcY, bounds) {
     this.minWidth = 0;
     
     this.minHeight = 0;
+    
+     //Create preview bounds if this renderable is not a preview bound itself
+    this.previewBounds = [];
+    if(!isPreview) {
+        for(var i = 1; i <= 4; i++) {
+            var boundX = wcX + i * startingSize;
+            var boundRenderable = new InteractiveBound(image, boundX, wcY, bounds,
+            true);
+            this.previewBounds.push(boundRenderable);
+        }
+    } 
+    
+    //Flag whether or not to show previewBounds
+    this.showPreview = false;
 }
 
 InteractiveBound.prototype.getPosition = function() {
@@ -56,12 +71,22 @@ InteractiveBound.prototype.getSize = function() {
     return sizeArr;
 }; 
 
+//Takes array of two elements [width, height]
+InteractiveBound.prototype.setSize = function(size) {
+    this.boundRenderable.getXform().setSize(size[0], size[1]);
+};
+
+//Takes array of two elements [x, y]
+InteractiveBound.prototype.setPosition = function(pos) {
+    this.boundRenderable.getXform().setPosition(pos[0], pos[1]);
+};
 InteractiveBound.prototype.incXPos = function(delta) {
     var bounds = this.getBounds();
     if(bounds[0] + delta > this.sourceBounds[0] && 
             bounds[1] + delta < this.sourceBounds[1]) {
         this.boundRenderable.getXform().incXPosBy(delta);
     }
+    this.updatePreviewBounds();
 };
 
 InteractiveBound.prototype.incYPos = function(delta) {
@@ -70,6 +95,7 @@ InteractiveBound.prototype.incYPos = function(delta) {
             bounds[3] + delta < this.sourceBounds[3]) {
         this.boundRenderable.getXform().incYPosBy(delta);
     }
+    this.updatePreviewBounds();
 };
 
 InteractiveBound.prototype.incWidth = function(delta) {
@@ -83,6 +109,7 @@ InteractiveBound.prototype.incWidth = function(delta) {
     if((delta + width) > this.minWidth) {
         this.boundRenderable.getXform().incWidthBy(delta);
     }
+    this.updatePreviewBounds();
 };
 
 InteractiveBound.prototype.incHeight = function(delta) {
@@ -96,6 +123,41 @@ InteractiveBound.prototype.incHeight = function(delta) {
     if((delta + height) > this.minHeight) {
         this.boundRenderable.getXform().incHeightBy(delta);
     }
+    this.updatePreviewBounds();
+};
+
+InteractiveBound.prototype.updatePreviewBounds = function() {
+    var centerX = this.boundRenderable.getXform().getXPos();
+    var centerY = this.boundRenderable.getXform().getYPos();
+    var width = this.boundRenderable.getXform().getWidth();
+    var height = this.boundRenderable.getXform().getHeight();
+    
+    for(var i = 1; i <= this.previewBounds.length; i++) {
+        this.previewBounds[i - 1].setSize([width, height]);
+        this.previewBounds[i - 1].setPosition([centerX + (i * width), centerY]);
+    }
+};
+
+InteractiveBound.prototype.togglePreview = function() {
+    this.showPreview = !this.showPreview;
+};
+
+//Checks if bound is within SpriteSource object
+InteractiveBound.prototype.isInBounds = function() {
+    var bounds = this.getBounds();
+    if(bounds[0] < this.sourceBounds[0]) {
+        return false;
+    }
+    if(bounds[1] > this.sourceBounds[1]) {
+        return false;
+    }
+    if(bounds[2] < this.sourceBounds[2]) {
+        return false;
+    }
+    if(bounds[3] > this.sourceBounds[3]) {
+        return false;
+    }
+    return true;
 };
 
 //Returns an array of bounds of the InteractiveBound object
@@ -136,6 +198,15 @@ InteractiveBound.prototype.draw = function(camera) {
     this.rightSquare.draw(vpMatrix);
     this.topSquare.draw(vpMatrix);
     this.bottomSquare.draw(vpMatrix);
+    
+    //If showPreview flag is true show the preview bounds
+    if(this.showPreview) {
+        for(var i = 0; i < this.previewBounds.length; i++) {
+            if(this.previewBounds[i].isInBounds()) {
+                this.previewBounds[i].draw(camera);
+            }
+        }
+    }
 }
 
 
