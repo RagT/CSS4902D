@@ -11,8 +11,8 @@ function SpriteSource(image, wcX, wcY) {
     this.aspectRatio = imageW / imageH;
     
     //Use aspect ratio to calculate size of sprite
-    var xSize = 200 * this.aspectRatio;
-    var ySize = 200;
+    var xSize = 150 * this.aspectRatio;
+    var ySize = 150;
     
     //Create sprite
     this.sourceRenderable = new SpriteRenderable(image);
@@ -41,6 +41,7 @@ function SpriteSource(image, wcX, wcY) {
     this.leftBorder.setColor([0,0,0,1]); //Black
     this.rightBorder.setColor([0,0,0,1]); //Black
     this.bottomBorder.setColor([0,0,0,1]); //Black
+    this.topBorder.setColor([0,0,0,1]); //Black
 }
 
 SpriteSource.prototype.getAspectRatio = function() {
@@ -54,7 +55,7 @@ SpriteSource.prototype.draw = function(camera) {
     //Draw sprite
     this.sourceRenderable.draw(vpMatrix);
     
-    var squareSize = 15;
+    var squareSize = 10;
     var centerX = this.sourceRenderable.getXform().getXPos();
     var centerY = this.sourceRenderable.getXform().getYPos();
     var width = this.sourceRenderable.getXform().getWidth();

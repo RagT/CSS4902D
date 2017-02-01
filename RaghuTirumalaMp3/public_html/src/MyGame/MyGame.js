@@ -25,43 +25,45 @@ function MyGame() {
     this.mInteractiveBound = null;
 
     this.mTextSysFont = null;
-
-    this.mTextToWork = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
 MyGame.prototype.loadScene = function () {
-    // Step A: loads the textures    
+    //load the textures    
     gEngine.Textures.loadTexture(this.kFontImage);
     gEngine.Textures.loadTexture(this.kMinionSprite);
     gEngine.Textures.loadTexture(this.kBoundImage);
-    
 };
 
 MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kFontImage);
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kBoundImage);
-    
 };
 
 MyGame.prototype.initialize = function () {
     //Create SpriteSource Renderable
     this.mSpriteSource = new SpriteSource(this.kMinionSprite, 50, 50);
+    //Create InteractiveBound renderable
+    this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50);
+    
     //Aspect ratio of sprite source image
     var aspectRatio = this.mSpriteSource.getAspectRatio();
     
     //Set up the cameras
-    
     this.mCamera = new Camera(
         vec2.fromValues(50, 50),   // position of the camera
-        200 * aspectRatio + 25,                       // width of camera
+        150 * aspectRatio + 20,                       // width of camera
         [160, 0, 480, 480]           // viewport (orgX, orgY, width, height)
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
-     
-    
+    var boundPos = this.mInteractiveBound.getPosition(); 
+    var boundSize = this.mInteractiveBound.getSize();
+    this.mTextSysFont = new FontRenderable("Status:Bound Pos=(" + 
+            boundPos[0].toPrecision(4) + " " + boundPos[1].toPrecision(4) +") Size=(" 
+            + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
+    this._initText(this.mTextSysFont, -100, -100, [0, 0, 0, 1], 10);
 };
 
 MyGame.prototype._initText = function (font, posX, posY, color, textH) {
@@ -81,14 +83,20 @@ MyGame.prototype.draw = function () {
 
     // Step  C: Draw everything
     this.mSpriteSource.draw(this.mCamera);
-
+    this.mInteractiveBound.draw(this.mCamera);
+    
     // drawing the text output
-
+    this.mTextSysFont.draw(this.mCamera.getVPMatrix());
 };
 
 // The 
 //  function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
-
+    //Update bound text position
+    var boundPos = this.mInteractiveBound.getPosition(); 
+    var boundSize = this.mInteractiveBound.getSize();
+    this.mTextSysFont.setText("Status:Bound Pos=(" + 
+            boundPos[0].toPrecision(4) + " " + boundPos[1].toPrecision(4) +") Size=(" 
+            + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
 };
