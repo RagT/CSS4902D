@@ -48,8 +48,10 @@ MyGame.prototype.unloadScene = function () {
 };
 
 MyGame.prototype.initialize = function () {
+    var spriteSourceImage = $('#Dropdown').val();
+    
     //Create SpriteSource Renderable
-    this.mSpriteSource = new SpriteSource(this.kMinionSprite, 50, 50);
+    this.mSpriteSource = new SpriteSource(spriteSourceImage, 50, 50);
     //Create InteractiveBound renderable
     this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50,
     this.mSpriteSource.getBounds(), false);

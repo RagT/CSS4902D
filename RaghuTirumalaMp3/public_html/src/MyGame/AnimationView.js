@@ -5,7 +5,7 @@
  */
 
 function AnimationView(interactiveBound, spriteSource) {
-    this.kMinionSprite = "assets/minion_sprite.png";
+    this.kMinionSprite = $('#Dropdown').val();
     this.interactiveBound = interactiveBound;
     this.spriteSource = spriteSource;
     
