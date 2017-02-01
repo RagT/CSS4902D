@@ -97,6 +97,23 @@ SpriteAnimateRenderable.prototype.setSpriteSequence = function (
     this._initAnimation();
 };
 
+SpriteAnimateRenderable.prototype.setSpriteSequenceUV = function (
+    top,
+    left,
+    elmWidth,
+    elmHeight,
+    numElements,
+    wPadding
+) {
+    this.mNumElems = numElements;
+    this.mFirstElmLeft = left;
+    this.mElmTop = top;
+    this.mElmWidth = elmWidth;
+    this.mElmHeight = elmHeight;
+    this.mWidthPadding = wPadding;
+    this._initAnimation();
+};
+
 SpriteAnimateRenderable.prototype.setAnimationSpeed = function (
     tickInterval   // number of update calls before advancing the animation
 ) {

@@ -27,6 +27,9 @@ function MyGame() {
     //ZoomedViews
     this.mZoomedViews = null;
     
+    //AnimationView
+    this.mAnimationView = null;
+    
     this.mTextSysFont = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -52,6 +55,9 @@ MyGame.prototype.initialize = function () {
     this.mSpriteSource.getBounds(), false);
     //Create Zoomed Views
     this.mZoomedViews = new ZoomedViews(this.mInteractiveBound);
+    
+    //Init animation view
+    this.mAnimationView = new AnimationView(this.mInteractiveBound, this.mSpriteSource);
     
     //Aspect ratio of sprite source image
     var aspectRatio = this.mSpriteSource.getAspectRatio();
@@ -84,7 +90,7 @@ MyGame.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-    // Step  B: Activate the drawing Camerad
+    // Step  B: Activate the drawing Camera
     this.mCamera.setupViewProjection();
     
     
@@ -96,17 +102,22 @@ MyGame.prototype.draw = function () {
     this.mTextSysFont.draw(this.mCamera.getVPMatrix());
     var cameras = this.mZoomedViews.getCameras();
     
+    //Draw on Zoomed Views
     for(var i = 0; i < cameras.length; i++) {
         cameras[i].setupViewProjection();
         this.mSpriteSource.draw(cameras[i]);
         this.mInteractiveBound.draw(cameras[i]);
     }
+    this.mAnimationView.draw();
+    
 };
 
 // The 
 //  function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
+    var keyPressed = false;
+    
     //Update bound text position
     var boundPos = this.mInteractiveBound.getPosition(); 
     var boundSize = this.mInteractiveBound.getSize();
@@ -117,6 +128,7 @@ MyGame.prototype.update = function () {
     var delta = 2;
     
     this.mZoomedViews.updateCameraPos();
+    this.mAnimationView.update();
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.W)){
         if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
@@ -124,6 +136,8 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incYPos(delta);
         }
+        this.mAnimationView.updatePosition();
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.A)){
@@ -132,6 +146,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incXPos(-delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.S)){
@@ -140,6 +155,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incYPos(-delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.D)){
@@ -148,6 +164,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incXPos(delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)){
@@ -156,6 +173,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incHeight(delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Left)){
@@ -164,6 +182,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incWidth(-delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Right)){
@@ -172,6 +191,7 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incWidth(delta);
         }
+        keyPressed = true;
     }
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)){
@@ -180,6 +200,19 @@ MyGame.prototype.update = function () {
         } else {
             this.mInteractiveBound.incHeight(-delta);
         }
+        keyPressed = true;
+    }
+    
+    if((gEngine.Input.isKeyReleased(gEngine.Input.keys.W)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.A)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.S)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.D)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.Up)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.Down)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.Left)
+    || gEngine.Input.isKeyReleased(gEngine.Input.keys.Right))
+    && !keyPressed) {
+        this.mAnimationView.updatePosition();
     }
     
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {

@@ -207,6 +207,14 @@ InteractiveBound.prototype.draw = function(camera) {
             }
         }
     }
-}
+};
 
-
+InteractiveBound.prototype.numFrames = function() {
+    var frameCount = 1;
+    for(var i = 0; i < this.previewBounds.length; i++) {
+        if(this.previewBounds[i].isInBounds()) {
+            frameCount += 1;
+        }
+    }
+    return frameCount;
+};
