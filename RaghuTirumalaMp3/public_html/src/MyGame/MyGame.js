@@ -24,6 +24,9 @@ function MyGame() {
     this.mSpriteSource = null;
     this.mInteractiveBound = null;
     
+    //ZoomedViews
+    this.mZoomedViews = null;
+    
     this.mTextSysFont = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -47,6 +50,8 @@ MyGame.prototype.initialize = function () {
     //Create InteractiveBound renderable
     this.mInteractiveBound = new InteractiveBound(this.kBoundImage, 50, 50,
     this.mSpriteSource.getBounds(), false);
+    //Create Zoomed Views
+    this.mZoomedViews = new ZoomedViews(this.mInteractiveBound);
     
     //Aspect ratio of sprite source image
     var aspectRatio = this.mSpriteSource.getAspectRatio();
@@ -79,15 +84,23 @@ MyGame.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
-    // Step  B: Activate the drawing Camera
+    // Step  B: Activate the drawing Camerad
     this.mCamera.setupViewProjection();
-
+    
+    
     // Step  C: Draw everything
     this.mSpriteSource.draw(this.mCamera);
     this.mInteractiveBound.draw(this.mCamera);
     
     // drawing the text output
     this.mTextSysFont.draw(this.mCamera.getVPMatrix());
+    var cameras = this.mZoomedViews.getCameras();
+    
+    for(var i = 0; i < cameras.length; i++) {
+        cameras[i].setupViewProjection();
+        this.mSpriteSource.draw(cameras[i]);
+        this.mInteractiveBound.draw(cameras[i]);
+    }
 };
 
 // The 
@@ -102,6 +115,8 @@ MyGame.prototype.update = function () {
             + boundSize[0].toPrecision(4) + " " + boundSize[1].toPrecision(4) +")");
     
     var delta = 2;
+    
+    this.mZoomedViews.updateCameraPos();
     
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.W)){
         if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Space)){
@@ -169,6 +184,5 @@ MyGame.prototype.update = function () {
     
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
         this.mInteractiveBound.togglePreview();
-        console.log("Q clicked");
     } 
 };
