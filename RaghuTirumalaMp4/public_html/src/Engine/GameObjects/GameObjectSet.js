@@ -37,3 +37,7 @@ GameObjectSet.prototype.draw = function (aCamera) {
         this.mSet[i].draw(aCamera);
     }
 };
+
+GameObjectSet.prototype.getObjects = function() {
+    return this.mSet;
+};
