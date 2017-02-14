@@ -49,3 +49,7 @@ ShakePosition.prototype._nextDampedHarmonic = function () {
     var frac = this.mNumCyclesLeft / this.mCycles;
     return frac * frac * Math.cos((1 - frac) * this.mOmega);
 };
+
+ShakePosition.prototype.setDuration = function (dur) {
+    this.mNumCyclesLeft = dur;
+};

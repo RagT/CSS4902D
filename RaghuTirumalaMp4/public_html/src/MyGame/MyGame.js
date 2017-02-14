@@ -58,7 +58,5 @@ MyGame.prototype.update = function () {
             this.mDyePacks.addToSet(new DyePack(this.mCamera.mouseWCX(),
             this.mCamera.mouseWCY(), this.kMinionSprite));
         }
-    }
-    
-    
+    }    
 };

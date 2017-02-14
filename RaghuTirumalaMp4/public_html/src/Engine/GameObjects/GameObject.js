@@ -91,3 +91,15 @@ GameObject.prototype.draw = function (aCamera) {
         this.mRenderComponent.draw(aCamera);
     }
 };
+
+GameObject.prototype.isInBounds = function(xMin, xMax, yMin, yMax) {
+    var xPos = this.getXform().getXPos();
+    var yPos = this.getXform().getYPos();
+    if(xPos < xMin || xPos > xMax) {
+        return false;
+    }
+    if(yPos < yMin || yPos > yMax) {
+        return false;
+    }
+    return true;
+};

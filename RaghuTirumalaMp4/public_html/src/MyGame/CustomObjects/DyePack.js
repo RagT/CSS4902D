@@ -17,9 +17,13 @@ function DyePack(xLoc, yLoc, texture) {
     this.dyePackSprite.getXform().setRotationInDegree(90);
     this.dyePackSprite.setColor([1,1,1,0]);
     
+    //shake behavior
+    this.shake = new ShakePosition(4, 0.2, 20, 300);
+    this.isHit = false;
+    
     //Call superclass constructor
     GameObject.call(this, this.dyePackSprite);
-    this.setSpeed(1);
+    this.setSpeed(2);
     this.creationTime = Date.now(); //Allows us to determine how long dye pack has been around
     
     //Move in positive x-direction
@@ -35,15 +39,26 @@ DyePack.prototype.draw = function(camera) {
 };
 
 DyePack.prototype.update = function() {
-    var pos = this.getXform().getPosition();
-    vec2.scaleAndAdd(pos, pos, this.getCurrentFrontDir(), this.getSpeed());
+    if(!this.isHit) {
+        var pos = this.getXform().getPosition();
+        vec2.scaleAndAdd(pos, pos, this.getCurrentFrontDir(), this.getSpeed());
+    } else {
+        if(!this.shake.shakeDone()) {
+            var currentPos = this.getXform().getPosition();
+            var nextPos = this.shake.getShakeResults();
+            this.getXform().setPosition(currentPos[0] + nextPos[0], currentPos[1] + nextPos[1]);
+        }
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.S)) {
+        this.isHit = true;
+    }
+    if(gEngine.Input.isKeyPressed(gEngine.Input.keys.D)){
+        this.incSpeedBy(-0.05);
+    }
 };
 
 DyePack.prototype.isExpired = function() {
-    return Date.now() - this.creationTime >= 5000;
-};
-
-//Handles behavior when dyepack hits patrol
-DyePack.prototype.hit = function() {
-    
+    var time = Date.now() - this.creationTime;
+    return !this.isInBounds(0, 200, 0, 150) || time >= 5000 || 
+            (this.isHit && this.shake.shakeDone()) || this.getSpeed() <= 0; 
 };
