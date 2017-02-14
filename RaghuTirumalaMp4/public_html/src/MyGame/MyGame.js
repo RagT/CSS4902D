@@ -28,6 +28,7 @@ MyGame.prototype.initialize = function () {
     );
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
+    this.mDye = new Dye(100, 75, this.kMinionSprite);
     this.mDyePacks = new GameObjectSet();
 };
 
@@ -46,17 +47,17 @@ MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     this.mCamera.setupViewProjection();
+    this.mDye.draw(this.mCamera);
     this.mDyePacks.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
 // anything from this function!
 MyGame.prototype.update = function () {
+    this.mDye.update(this.mCamera);
     this.mDyePacks.update();
-    if(gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Left)) {
-        if(this.mCamera.isMouseInViewport()) {
-            this.mDyePacks.addToSet(new DyePack(this.mCamera.mouseWCX(),
-            this.mCamera.mouseWCY(), this.kMinionSprite));
-        }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
+        this.mDyePacks.addToSet(new DyePack(this.mDye.getXform().getXPos(),
+        this.mDye.getXform().getYPos(), this.kMinionSprite));
     }    
 };
