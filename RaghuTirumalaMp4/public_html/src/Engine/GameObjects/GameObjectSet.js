@@ -29,6 +29,7 @@ GameObjectSet.prototype.update = function () {
     for (i = 0; i < this.mSet.length; i++) {
         this.mSet[i].update();
     }
+    this.removeExpiredObjects();
 };
 
 GameObjectSet.prototype.draw = function (aCamera) {
@@ -40,4 +41,19 @@ GameObjectSet.prototype.draw = function (aCamera) {
 
 GameObjectSet.prototype.getObjects = function() {
     return this.mSet;
+};
+
+GameObjectSet.prototype.removeObjectAtIndex = function(index) {
+    this.mSet.splice(index, 1);
+};
+
+GameObjectSet.prototype.removeExpiredObjects = function() {
+  var i;
+  for(i = 0; i < this.mSet.length; i++) {
+      if(this.mSet[i].isExpired()) {
+          //remove object from set
+          this.removeObjectAtIndex(i);
+          i--; //decrement i so we dont skip objects
+      }
+  }
 };

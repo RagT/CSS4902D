@@ -16,7 +16,6 @@ function MyGame() {
     this.mCamera = null;
     this.mDyePacks = null;
     this.kMinionSprite = "assets/minion_sprite.png";
-    this.testSprite = null;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
 
@@ -30,7 +29,6 @@ MyGame.prototype.initialize = function () {
     this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
             // sets the background to gray
     this.mDyePacks = new GameObjectSet();
-    this.testSprite = new DyePack(100, 75, this.kMinionSprite);
 };
 
 MyGame.prototype.loadScene = function () {
@@ -48,8 +46,6 @@ MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     this.mCamera.setupViewProjection();
-    this.testSprite.draw(this.mCamera);
-
     this.mDyePacks.draw(this.mCamera);
 };
 
@@ -57,13 +53,11 @@ MyGame.prototype.draw = function () {
 // anything from this function!
 MyGame.prototype.update = function () {
     this.mDyePacks.update();
-    this.testSprite.update();
     if(gEngine.Input.isButtonClicked(gEngine.Input.mouseButton.Left)) {
         if(this.mCamera.isMouseInViewport()) {
             this.mDyePacks.addToSet(new DyePack(this.mCamera.mouseWCX(),
             this.mCamera.mouseWCY(), this.kMinionSprite));
         }
-        console.log(this.mDyePacks.getObjects());
     }
     
     
