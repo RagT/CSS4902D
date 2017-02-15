@@ -62,3 +62,7 @@ DyePack.prototype.isExpired = function() {
     return !this.isInBounds(0, 200, 0, 150) || time >= 5000 || 
             (this.isHit && this.shake.shakeDone()) || this.getSpeed() <= 0; 
 };
+
+DyePack.prototype.hit = function() {
+    this.isHit = true;
+};

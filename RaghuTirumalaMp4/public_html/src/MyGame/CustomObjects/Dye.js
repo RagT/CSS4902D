@@ -45,8 +45,7 @@ Dye.prototype.update = function(camera) {
     }
     
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Q)) {
-        this.isHit = true;
-        this.shake.setDuration(60);
+        this.hit();
     }
     if(camera.isMouseInViewport()) {
         this.intX.setFinalValue(camera.mouseWCX());
@@ -56,3 +55,7 @@ Dye.prototype.update = function(camera) {
     this.getXform().setYPos(this.intY.getValue());
 };
 
+Dye.prototype.hit = function() {
+    this.isHit = true;
+    this.shake.setDuration(60);
+};
