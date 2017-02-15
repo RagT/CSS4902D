@@ -15,6 +15,7 @@ function MyGame() {
     // The camera to view the scene
     this.mCamera = null;
     this.mDyePacks = null;
+    this.mPatrols = null;
     this.kMinionSprite = "assets/minion_sprite.png";
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -30,6 +31,7 @@ MyGame.prototype.initialize = function () {
             // sets the background to gray
     this.mDye = new Dye(100, 75, this.kMinionSprite);
     this.mDyePacks = new GameObjectSet();
+    this.mPatrols = new GameObjectSet();
 };
 
 MyGame.prototype.loadScene = function () {
@@ -49,6 +51,7 @@ MyGame.prototype.draw = function () {
     this.mCamera.setupViewProjection();
     this.mDye.draw(this.mCamera);
     this.mDyePacks.draw(this.mCamera);
+    this.mPatrols.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -56,8 +59,23 @@ MyGame.prototype.draw = function () {
 MyGame.prototype.update = function () {
     this.mDye.update(this.mCamera);
     this.mDyePacks.update();
+    this.mPatrols.update();
+    
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Space)) {
         this.mDyePacks.addToSet(new DyePack(this.mDye.getXform().getXPos(),
         this.mDye.getXform().getYPos(), this.kMinionSprite));
     }    
+    
+    //Spawn a new patrol
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.C)) {
+        var pos = this.getRandomPosInBounds(100, 200, 75, 150);
+        this.mPatrols.addToSet(new Patrol(pos[0], pos[1], this.kMinionSprite));
+    }
+};
+
+MyGame.prototype.getRandomPosInBounds = function(xMin, xMax, yMin, yMax) {
+  var pos = [];
+  pos.push(Math.floor((Math.random() * (xMax - xMin)) + xMin));
+  pos.push(Math.floor((Math.random() * (yMax - yMin)) + yMin));
+  return pos;
 };

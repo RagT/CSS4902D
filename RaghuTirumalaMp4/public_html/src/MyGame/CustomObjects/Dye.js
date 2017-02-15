@@ -48,9 +48,10 @@ Dye.prototype.update = function(camera) {
         this.isHit = true;
         this.shake.setDuration(60);
     }
-    
-    this.intX.setFinalValue(camera.mouseWCX());
-    this.intY.setFinalValue(camera.mouseWCY());
+    if(camera.isMouseInViewport()) {
+        this.intX.setFinalValue(camera.mouseWCX());
+        this.intY.setFinalValue(camera.mouseWCY());
+    }
     this.getXform().setXPos(this.intX.getValue());
     this.getXform().setYPos(this.intY.getValue());
 };
