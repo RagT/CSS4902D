@@ -56,7 +56,7 @@ var Rectangle = function (center, width, height) {
     
     this.updateLines();
     
-    this.boundCircle = new Circle(this.mCenter, this.mBoundRadius);
+    this.boundCircle = new Circle(this.mCenter, this.mBoundRadius, false);
 };
 
 var prototype = Object.create(RigidShape.prototype);
@@ -153,10 +153,6 @@ Rectangle.prototype.updateLines = function() {
                                
 };
 
-Rectangle.prototype.getRadius = function() {
-    return this.mBoundRadius;
-};
-
 Rectangle.prototype.rotate = function(angleInRad) {
     for(var i = 0; i < this.mVertex.length; i++){
         vec2.rotateWRT(this.mVertex[i], this.mVertex[i], angleInRad, this.mCenter);
@@ -166,3 +162,6 @@ Rectangle.prototype.rotate = function(angleInRad) {
     this.updateLines();
 };
 
+Rectangle.prototype.getCircle = function() {
+    return this.boundCircle;
+};

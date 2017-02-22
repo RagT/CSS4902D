@@ -41,20 +41,15 @@ MyGame.prototype.initialize = function () {
     this.mObjects = new GameObjectSet();
     this.mObjects.addToSet(new Hero(this.kMinionSprite));
     
-//    //Initialize enemies
-//    for(var i = 0; i < this.numEnemies; i++) {
-//        var enemyRenderable = new SpriteAnimateRenderable(this.kMinionSprite);
-//        enemyRenderable.setSpriteSequence(512, 0,
-//                                           204, 164,
-//                                           5,
-//                                           0);
-//        enemyRenderable.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
-//        enemyRenderable.setAnimationSpeed(10);
-//        
-//        enemyRenderable.getXform().setPosition()
-//        
-//        var enemyCircle = new Circle();
-//    }
+    var startingX = 10;
+    var startingY = 50;
+    
+    //Initialize enemies
+    for(var i = 0; i < this.numEnemies; i++) {
+        var xLoc = startingX + 20 * i;
+        var yLoc = startingY;
+        this.mObjects.addToSet(new Enemy(this.kMinionSprite, xLoc, yLoc));
+    }
     
     this.mMsg = new FontRenderable("Num: " + (this.numEnemies + 1) + " Current=" + 
     this.currentObj + " R=" + this.mObjects.getObjectAt(this.currentObj).getRadius());
@@ -89,6 +84,18 @@ MyGame.prototype.update = function () {
     gEngine.Physics.collision();
     this.mObjects.update();
     this.updateStatus();
+    
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Left)) {
+        if(this.currentObj > 0) {
+            this.currentObj--;
+        }
+    }
+    
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Right)) {
+        if(this.currentObj < this.numEnemies) {
+            this.currentObj++;
+        }
+    }
 };
 
 MyGame.prototype.updateStatus = function() {

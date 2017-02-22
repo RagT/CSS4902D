@@ -96,7 +96,7 @@ GameObject.prototype.draw = function (aCamera) {
 
 //Handle collision between two GameObjects using their physics components
 GameObject.prototype.boundTest = function(otherObject) {
-    if(this.mPhysicsComponent.boundTest(otherObject.getPhysicsComponent)){
+    if(this.mPhysicsComponent.boundTest(otherObject.getPhysicsComponent())){
         //flip object velocities
         this.setSpeed(-1 * this.getSpeed());
         otherObject.setSpeed(-1 * otherObject.getSpeed());

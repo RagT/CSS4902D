@@ -25,7 +25,9 @@ gEngine.Core.inheritPrototype(Hero, GameObject);
 
 Hero.prototype.draw = function(camera) {
     this.getRenderable().draw(camera);
-    this.getPhysicsComponent().draw(camera);
+    if(this.showBounds) {
+        this.getPhysicsComponent().draw(camera);
+    }
 };
 
 Hero.prototype.update = function() {

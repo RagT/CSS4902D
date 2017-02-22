@@ -9,11 +9,12 @@
 
 "use strict";
 
-var Circle = function (center, radius) {
+var Circle = function (center, radius, showRigid) {
     RigidShape.call(this, center);
     this.mType = "Circle";
     this.mBoundRadius = radius;
     this.mRigidRadius = radius;
+    this.showRigid = showRigid;
 };
 
 var prototype = Object.create(RigidShape.prototype);
@@ -27,7 +28,9 @@ Circle.prototype.move = function (s) {
 };
 
 Circle.prototype.draw = function (camera) {
-    this.drawCircle(this.mRigidRadius, 30, [0,0,0,1], camera);
+    if(this.showRigid) {
+        this.drawCircle(this.mRigidRadius, 30, [0,0,0,1], camera);
+    }
     this.drawCircle(this.mBoundRadius, 30, [1,1,1,1], camera);
 };
 
@@ -38,13 +41,14 @@ Circle.prototype.rotate = function (angle) {
     return this;
 };
 
-Circle.prototype.getRadius = function() {
-    return this.mBoundRadius;
-};
-
 Circle.prototype.updatePosAndRad= function(center, rad) {
     this.mBoundRadius = rad;
     this.mCenter = center;
+};
+
+Circle.prototype.incRadBy = function(delta) {
+    if(this.mBoundRadius + delta > 0) 
+        this.mBoundRadius += delta;
 };
 
 Circle.prototype.drawCircle = function(radius, num_segments, color, camera) {

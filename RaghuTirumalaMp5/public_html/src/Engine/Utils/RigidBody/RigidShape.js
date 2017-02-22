@@ -6,7 +6,7 @@
 
 
 /*jslint node: true, vars: true, evil: true, bitwise: true */
-/* global gEngine */
+/* global gEngine, vec2 */
 
 "use strict";
 
@@ -25,12 +25,17 @@ RigidShape.prototype.update = function () {
 };
 
 RigidShape.prototype.boundTest = function (otherShape) {
-    var vFrom1to2 = otherShape.mCenter.subtract(this.mCenter);
+    var vFrom1to2  = vec2.fromValues(0, 0);
+    vec2.subtract(vFrom1to2, otherShape.mCenter, this.mCenter);
     var rSum = this.mBoundRadius + otherShape.mBoundRadius;
-    var dist = vFrom1to2.length();
+    var dist = vec2.length(vFrom1to2);
     if (dist > rSum) {
         //not overlapping
         return false;
     }
     return true;
+};
+
+RigidShape.prototype.getRadius = function() {
+    return this.mBoundRadius;
 };
