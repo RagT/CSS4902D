@@ -29,29 +29,36 @@ Hero.prototype.draw = function(camera) {
 };
 
 Hero.prototype.update = function() {
-    var delta = 0.2;
+    var delta = 0.4;
+    var rotationDelta = 0.1;
     
     //Movement
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.W)) {
-        this.getXform().incYPosBy(delta);
+        if(this.getXform().getYPos() < 75)
+            this.getXform().incYPosBy(delta);
     }
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.A)) {
-        this.getXform().incXPosBy(-delta);
+        if(this.getXform().getXPos() > 0)
+            this.getXform().incXPosBy(-delta);
     }
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.S)) {
-        this.getXform().incYPosBy(-delta);
+        if(this.getXform().getYPos() > 0)
+            this.getXform().incYPosBy(-delta);
     }
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.D)) {
-        this.getXform().incXPosBy(delta);
+        if(this.getXform().getXPos() < 100)
+            this.getXform().incXPosBy(delta);
     }
     this.getPhysicsComponent().updatePos(this.getXform().getPosition());
     
     //Rotation
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Z)) {
-        
+        this.getXform().incRotationByRad(rotationDelta);
+        this.getPhysicsComponent().rotate(rotationDelta);
     }
     if(gEngine.Input.isKeyPressed(gEngine.Input.keys.X)) {
-        
+        this.getXform().incRotationByRad(-rotationDelta);
+        this.getPhysicsComponent().rotate(-rotationDelta);
     }
     
     //Toggle showing bounds

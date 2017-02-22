@@ -55,6 +55,8 @@ var Rectangle = function (center, width, height) {
     this.rightNormal.setColor(rightColor);
     
     this.updateLines();
+    
+    this.boundCircle = new Circle(this.mCenter, this.mBoundRadius);
 };
 
 var prototype = Object.create(RigidShape.prototype);
@@ -88,15 +90,6 @@ Rectangle.prototype.calcNormals = function(){
     }
 };
 
-Rectangle.prototype.move = function (v) {
-    var i;
-    for (i = 0; i < this.mVertex.length; i++) {
-        this.mVertex[i] = this.mVertex[i].add(v);
-    }
-    this.mcenter[1]= this.mCenter.add(v);
-    return this;
-};
-
 Rectangle.prototype.draw = function (camera) {
     this.top.draw(camera);
     this.bottom.draw(camera);
@@ -106,19 +99,25 @@ Rectangle.prototype.draw = function (camera) {
     this.bottomNormal.draw(camera);
     this.leftNormal.draw(camera);
     this.rightNormal.draw(camera);
+    this.boundCircle.draw(camera);
 };
 
 Rectangle.prototype.updatePos = function(center){
     //0--TopLeft;1--TopRight;2--BottomRight;3--BottomLeft
+    this.mCenter = center;
     this.mVertex[0] = vec2.fromValues(center[0] - this.mWidth / 2, center[1]- this.mHeight / 2);
     this.mVertex[1] = vec2.fromValues(center[0] + this.mWidth / 2, center[1]- this.mHeight / 2);
     this.mVertex[2] = vec2.fromValues(center[0] + this.mWidth / 2, center[1]+ this.mHeight / 2);
     this.mVertex[3] = vec2.fromValues(center[0] - this.mWidth / 2, center[1]+ this.mHeight / 2);
-
+    for(var i = 0; i < this.mVertex.length; i++){
+        vec2.rotateWRT(this.mVertex[i], this.mVertex[i], this.mAngle, this.mCenter);
+    }
+    
     //0--Top;1--Right;2--Bottom;3--Left
     //mFaceNormal is normal of face toward outside of rectangle
     this.calcNormals();
     this.updateLines();
+    this.boundCircle.updatePosAndRad(center, this.mBoundRadius);
 };
 
 Rectangle.prototype.updateLines = function() {
@@ -156,5 +155,14 @@ Rectangle.prototype.updateLines = function() {
 
 Rectangle.prototype.getRadius = function() {
     return this.mBoundRadius;
+};
+
+Rectangle.prototype.rotate = function(angleInRad) {
+    for(var i = 0; i < this.mVertex.length; i++){
+        vec2.rotateWRT(this.mVertex[i], this.mVertex[i], angleInRad, this.mCenter);
+    }
+    this.mAngle += angleInRad;
+    this.calcNormals();
+    this.updateLines();
 };
 

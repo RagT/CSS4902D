@@ -56,10 +56,10 @@ MyGame.prototype.initialize = function () {
 //        var enemyCircle = new Circle();
 //    }
     
-    this.mMsg = new FontRenderable("Num: " + this.numEnemies + 1 + " Current=" + 
+    this.mMsg = new FontRenderable("Num: " + (this.numEnemies + 1) + " Current=" + 
     this.currentObj + " R=" + this.mObjects.getObjectAt(this.currentObj).getRadius());
     this.mMsg.setColor([0, 0, 0, 1]);
-    this.mMsg.getXform().setPosition(-19, -8);
+    this.mMsg.getXform().setPosition(3, 4);
     this.mMsg.setTextHeight(3);
 };
 
@@ -79,6 +79,7 @@ MyGame.prototype.draw = function () {
 
     this.mCamera.setupViewProjection();
     this.mObjects.draw(this.mCamera);
+    this.mMsg.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -87,9 +88,10 @@ MyGame.prototype.update = function () {
     //Handle collisions for all game objects
     gEngine.Physics.collision();
     this.mObjects.update();
+    this.updateStatus();
 };
 
 MyGame.prototype.updateStatus = function() {
-    this.mMsg.setText("Num: " + this.numEnemies + 1 + " Current=" + 
+    this.mMsg.setText("Num: " + (this.numEnemies + 1) + " Current=" + 
     this.currentObj + " R=" + this.mObjects.getObjectAt(this.currentObj).getRadius());
 };

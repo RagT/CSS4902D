@@ -509,6 +509,27 @@ vec2.cross = function(out, a, b) {
 };
 
 /**
+ * 
+ * @param {point} out
+ * @param {point} a
+ * @param {angleInRadian} c
+ * @param {refPt} pt
+ * @returns {rotated point}
+ */
+vec2.rotateWRT = function(out, a, c, pt){
+        var r=[];
+       
+     vec2.subtract(r, a, pt);
+     vec2.rotate(r, r, c);
+     vec2.add(r, r, pt);
+ 
+     out[0] = r[0];
+     out[1] = r[1];
+ 
+        return r;
+};
+
+/**
  * Performs a linear interpolation between two vec2's
  *
  * @param {vec2} out the receiving vector
