@@ -103,6 +103,10 @@ GameObject.prototype.boundTest = function(otherObject) {
     }
 };
 
+GameObject.prototype.getRadius = function() {
+    return this.mPhysicsComponent.getRadius();
+};
+
 GameObject.prototype.getPhysicsComponent = function() {
     return this.mPhysicsComponent;
 };
