@@ -4,16 +4,18 @@
  */
 
 /*jslint node: true, vars: true */
-/*global vec2, vec3, BoundingBox */
+/*global vec2, vec3, BoundingBox, gEngine */
 /* find out more about jslint: http://www.jslint.com/help.html */
 
 "use strict";  // Operate in Strict mode such that variables must be declared before used!
 
-function GameObject(renderableObj) {
+function GameObject(renderableObj, RigidShape) {
     this.mRenderComponent = renderableObj;
     this.mVisible = true;
     this.mCurrentFrontDir = vec2.fromValues(0, 1);  // this is the current front direction of the object
     this.mSpeed = 0;
+    this.mPhysicsComponent = RigidShape;
+    gEngine.Core.mAllObjects.push(this);
 }
 GameObject.prototype.getXform = function () { return this.mRenderComponent.getXform(); };
 GameObject.prototype.getBBox = function () {
@@ -90,4 +92,17 @@ GameObject.prototype.draw = function (aCamera) {
     if (this.isVisible()) {
         this.mRenderComponent.draw(aCamera);
     }
+};
+
+//Handle collision between two GameObjects using their physics components
+GameObject.prototype.boundTest = function(otherObject) {
+    if(this.mPhysicsComponent.boundTest(otherObject.getPhysicsComponent)){
+        //flip object velocities
+        this.setSpeed(-1 * this.getSpeed());
+        otherObject.setSpeed(-1 * otherObject.getSpeed());
+    }
+};
+
+GameObject.prototype.getPhysicsComponent = function() {
+    return this.mPhysicsComponent;
 };

@@ -17,6 +17,10 @@ gEngine.Core = (function () {
     // instance variables
     // The graphical context to draw to
     var mGL = null;
+    
+    //Array of all game objects
+    var mAllObjects = [];
+    
     // initialize the WebGL, the vertex buffer and compile the shaders
     var _initializeWebGL = function (htmlCanvasID) {
         var canvas = document.getElementById(htmlCanvasID);
@@ -85,7 +89,8 @@ gEngine.Core = (function () {
         clearCanvas: clearCanvas,
         inheritPrototype: inheritPrototype,
         startScene: startScene,
-        cleanUp: cleanUp
+        cleanUp: cleanUp,
+        mAllObjects: mAllObjects
     };
 
     return mPublic;
