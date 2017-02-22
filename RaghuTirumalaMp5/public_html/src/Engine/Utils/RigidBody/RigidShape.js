@@ -10,7 +10,7 @@
 
 "use strict";
 
-function RigidShape(center, mass, friction, restitution) {
+function RigidShape(center) {
     this.mCenter = center;
 
     //angle

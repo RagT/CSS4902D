@@ -9,13 +9,13 @@
 
 "use strict";
 
-var Circle = function (center, radius, mass, friction, restitution) {
-    RigidShape.call(this, center, mass, friction, restitution);
+var Circle = function (center, radius) {
+    RigidShape.call(this, center);
     this.mType = "Circle";
     this.mRadius = radius;
     this.mBoundRadius = radius;
     //The start point of line in circle
-    this.mStartpoint = vec2.fromValues(center.x, center.y - radius);
+    this.mStartpoint = vec2.fromValues(center[0], center[1] - radius);
 };
 
 var prototype = Object.create(RigidShape.prototype);
@@ -29,17 +29,7 @@ Circle.prototype.move = function (s) {
 };
 
 Circle.prototype.draw = function (context) {
-    context.beginPath();
 
-    //draw a circle
-    context.arc(this.mCenter.x, this.mCenter.y, this.mRadius, 0, Math.PI * 2, true);
-
-    //draw a line from start point toward center
-    context.moveTo(this.mStartpoint.x, this.mStartpoint.y);
-    context.lineTo(this.mCenter.x, this.mCenter.y);
-
-    context.closePath();
-    context.stroke();
 };
 
 //rotate angle in counterclockwise
@@ -47,4 +37,15 @@ Circle.prototype.rotate = function (angle) {
     this.mAngle += angle;
     this.mStartpoint = this.mStartpoint.rotate(this.mCenter, angle);
     return this;
+};
+
+Circle.prototype.getRadius = function() {
+    return this.mBoundRadius;
+};
+
+Circle.prototype.updatePosAndRad= function(center, rad) {
+    this.mRadius = rad;
+    this.mBoundRadius = rad;
+    //The start point of line in circle
+    this.mStartpoint = vec2.fromValues(center.x, center.y - rad);
 };

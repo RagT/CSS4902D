@@ -37,33 +37,24 @@ MyGame.prototype.initialize = function () {
         100,                       // width of camera
         [0, 0, 800, 600]           // viewport (orgX, orgY, width, height)
     );
-    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
-            // sets the background to gray
-    var heroRenderable = new SpriteRenderable(this.kMinionSprite);
-    heroRenderable.setElementPixelPositions(0, 120, 0, 180);
-    heroRenderable.getXform().setPosition(50, 37.5);
-    
-    var heroRec = new Rectangle(heroRenderable.getXform().getPosition(), 
-    heroRenderable.getXform().getWidth(), heroRenderable.getXform().getHeight(), 0);
     
     this.mObjects = new GameObjectSet();
-    this.mObjects.addToSet(new GameObject(heroRenderable, heroRec));
-    this.mObjects.getObjectAt(0).setSpeed(0); //makes sure velocity is 0
+    this.mObjects.addToSet(new Hero(this.kMinionSprite));
     
-    //Initialize enemies
-    for(var i = 0; i < this.numEnemies; i++) {
-        var enemyRenderable = new SpriteAnimateRenderable(this.kMinionSprite);
-        enemyRenderable.setSpriteSequence(512, 0,
-                                           204, 164,
-                                           5,
-                                           0);
-        enemyRenderable.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
-        enemyRenderable.setAnimationSpeed(10);
-        
-        enemyRenderable.getXform().setPosition()
-        
-        var enemyCircle = new Circle();
-    }
+//    //Initialize enemies
+//    for(var i = 0; i < this.numEnemies; i++) {
+//        var enemyRenderable = new SpriteAnimateRenderable(this.kMinionSprite);
+//        enemyRenderable.setSpriteSequence(512, 0,
+//                                           204, 164,
+//                                           5,
+//                                           0);
+//        enemyRenderable.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateSwing);
+//        enemyRenderable.setAnimationSpeed(10);
+//        
+//        enemyRenderable.getXform().setPosition()
+//        
+//        var enemyCircle = new Circle();
+//    }
     
     this.mMsg = new FontRenderable("Num: " + this.numEnemies + 1 + " Current=" + 
     this.currentObj + " R=" + this.mObjects.getObjectAt(this.currentObj).getRadius());
@@ -87,7 +78,7 @@ MyGame.prototype.draw = function () {
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
     this.mCamera.setupViewProjection();
-
+    this.mObjects.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -95,6 +86,7 @@ MyGame.prototype.draw = function () {
 MyGame.prototype.update = function () {
     //Handle collisions for all game objects
     gEngine.Physics.collision();
+    this.mObjects.update();
 };
 
 MyGame.prototype.updateStatus = function() {
