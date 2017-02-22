@@ -39,3 +39,8 @@ RigidShape.prototype.boundTest = function (otherShape) {
 RigidShape.prototype.getRadius = function() {
     return this.mBoundRadius;
 };
+
+RigidShape.prototype.incRadBy = function(delta) {
+    if(this.mBoundRadius + delta > 0) 
+        this.mBoundRadius += delta;
+};

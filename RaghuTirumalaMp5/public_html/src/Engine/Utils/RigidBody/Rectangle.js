@@ -117,7 +117,7 @@ Rectangle.prototype.updatePos = function(center){
     //mFaceNormal is normal of face toward outside of rectangle
     this.calcNormals();
     this.updateLines();
-    this.boundCircle.updatePosAndRad(center, this.mBoundRadius);
+    this.boundCircle.updatePos(center);
 };
 
 Rectangle.prototype.updateLines = function() {

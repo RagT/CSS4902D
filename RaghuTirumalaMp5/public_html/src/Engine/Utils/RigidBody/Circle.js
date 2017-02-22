@@ -46,9 +46,8 @@ Circle.prototype.updatePosAndRad= function(center, rad) {
     this.mCenter = center;
 };
 
-Circle.prototype.incRadBy = function(delta) {
-    if(this.mBoundRadius + delta > 0) 
-        this.mBoundRadius += delta;
+Circle.prototype.updatePos = function(center) {
+    this.mCenter = center;
 };
 
 Circle.prototype.drawCircle = function(radius, num_segments, color, camera) {

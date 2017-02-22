@@ -63,6 +63,18 @@ Hero.prototype.update = function() {
         this.getPhysicsComponent().rotate(-rotationDelta);
     }
     
+    if(this.isSelected) {
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
+            this.getPhysicsComponent().incRadBy(delta);
+            this.getPhysicsComponent().getCircle().incRadBy(delta);
+        }
+
+        if(gEngine.Input.isKeyPressed(gEngine.Input.keys.Down)) {
+            this.getPhysicsComponent().incRadBy(-delta);
+            this.getPhysicsComponent().getCircle().incRadBy(-delta);
+        }
+    }
+    
     //Toggle showing bounds
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.T)) {
         this.showBounds = !this.showBounds;

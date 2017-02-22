@@ -15,6 +15,7 @@ function GameObject(renderableObj, RigidShape) {
     this.mCurrentFrontDir = vec2.fromValues(0, 1);  // this is the current front direction of the object
     this.mSpeed = 0;
     this.mPhysicsComponent = RigidShape;
+    this.isSelected = false;
     gEngine.Core.mAllObjects.push(this);
 }
 GameObject.prototype.getXform = function () { return this.mRenderComponent.getXform(); };
@@ -109,4 +110,12 @@ GameObject.prototype.getRadius = function() {
 
 GameObject.prototype.getPhysicsComponent = function() {
     return this.mPhysicsComponent;
+};
+
+GameObject.prototype.isSelected = function() {
+    return this.isSelected;
+};
+
+GameObject.prototype.setSelected = function(b) {
+    this.isSelected = b;
 };

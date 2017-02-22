@@ -51,6 +51,8 @@ MyGame.prototype.initialize = function () {
         this.mObjects.addToSet(new Enemy(this.kMinionSprite, xLoc, yLoc));
     }
     
+    this.mObjects.getObjectAt(this.currentObj).setSelected(true);
+    
     this.mMsg = new FontRenderable("Num: " + (this.numEnemies + 1) + " Current=" + 
     this.currentObj + " R=" + this.mObjects.getObjectAt(this.currentObj).getRadius());
     this.mMsg.setColor([0, 0, 0, 1]);
@@ -87,13 +89,17 @@ MyGame.prototype.update = function () {
     
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Left)) {
         if(this.currentObj > 0) {
+            this.mObjects.getObjectAt(this.currentObj).setSelected(false);
             this.currentObj--;
+            this.mObjects.getObjectAt(this.currentObj).setSelected(true);
         }
     }
     
     if(gEngine.Input.isKeyClicked(gEngine.Input.keys.Right)) {
         if(this.currentObj < this.numEnemies) {
+            this.mObjects.getObjectAt(this.currentObj).setSelected(false);
             this.currentObj++;
+            this.mObjects.getObjectAt(this.currentObj).setSelected(true);
         }
     }
 };
