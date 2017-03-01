@@ -30,8 +30,8 @@ function Circle(atX, atY) {
 gEngine.Core.inheritPrototype(Circle, GameObject);
 
 Circle.prototype.update = function (aCamera) {
+    GameObject.prototype.update.call(this);
     if(this.mSelected) {
-        GameObject.prototype.update.call(this);
             // control by WASD
         var xform = this.getXform();
         if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W)) {

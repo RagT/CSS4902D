@@ -43,11 +43,11 @@ MyGame.prototype.initialize = function () {
     for (var i = 0; i<=5; i++) {
         var x = 20 + 60 * Math.random();
         var y = 15 + 45 * Math.random();
-        //if(i % 2 == 0) {
-        //    this.mAllObjs.addToSet(new Rectangle(x,y));
-        //} else {
+        if(i % 2 == 0) {
+            this.mAllObjs.addToSet(new Rectangle(x,y));
+        } else {
             this.mAllObjs.addToSet(new Circle(x,y));
-        //}
+        }
     }
     
     this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(true);

@@ -12,10 +12,14 @@ function RigidShape(xf) {
     this.mVelocity = vec2.fromValues(0, 0);
     this.mBoundRadius = 0;
     this.mType = null;
+    this.showBounds = true;
 }
 
+RigidShape.prototype.getShowBounds = function() { return this.showBounds};
 RigidShape.prototype.setBoundRadius = function(r) {
-    this.mBoundRadius = r;
+    if(r > 0) {
+        this.mBoundRadius = r;
+    }
 };
 RigidShape.prototype.getBoundRadius = function() {
     return this.mBoundRadius;
@@ -35,8 +39,11 @@ RigidShape.prototype.travel = function(dt) {};
 
 RigidShape.prototype.update = function () {
     var dt = gEngine.GameLoop.getUpdateIntervalInSeconds();
-    //s += v*t 
+    //s += v*t b
     this.travel(dt);
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.B)){
+        this.showBounds = !this.showBounds;
+    }
 };
 
 

@@ -26,8 +26,8 @@ function Rectangle(atX, atY) {
 gEngine.Core.inheritPrototype(Rectangle, GameObject);
 
 Rectangle.prototype.update = function () {
+    GameObject.prototype.update.call(this);
     if(this.mSelected) {
-        GameObject.prototype.update.call(this);
         // control by WASD
         var xform = this.getXform();
         if (gEngine.Input.isKeyPressed(gEngine.Input.keys.W)) {

@@ -39,7 +39,9 @@ RigidCircle.prototype.draw = function (aCamera) {
     this.mLine.setSecondVertex(u[0], u[1]);
     this.mLine.draw(aCamera);
     
-    this.drawCircle(aCamera, this.mBoundRadius);
+    if(this.getShowBounds()) {
+        this.drawCircle(aCamera, this.mBoundRadius);
+    }
 };
 
 RigidCircle.prototype.update = function () {
@@ -87,7 +89,7 @@ RigidCircle.prototype.collision = function(rigidShape) {
   var collision = false;
   switch(type) {
       case "RigidRectangle":
-          collision = this.collidedCircRect(this, rigidShape, cInfo);
+          collision = rigidShape.collidedRectCirc(this, cInfo);
           break;
       case "RigidCircle":
           collision = this.collidedCircCirc(this, rigidShape, cInfo);
