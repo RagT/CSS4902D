@@ -5,7 +5,7 @@
  */
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
-/* global RigidShape */
+/* global RigidShape, vec2, gEngine */
 
 var RigidRectangle = function (xf, width, height) {
     RigidShape.call(this, xf);
@@ -96,4 +96,32 @@ RigidRectangle.prototype.draw = function (aCamera) {
 
 RigidRectangle.prototype.update = function () {
     RigidShape.prototype.update.call(this);
+};
+
+//Collision Handling Functions
+RigidRectangle.prototype.collidedRectCirc = function(circ) {
+    
+};
+
+RigidRectangle.prototype.collidedRectRect = function(r1, r2, collisonInfo) {
+   
+};
+
+RigidRectangle.prototype.collision = function(rigidShape) {
+  var type = rigidShape.getType();
+  var cInfo = new CollisionInfo();
+  var collision = false;
+  switch(type) {
+      case "RigidRectangle":
+          collision = this.collidedRectRect(this, rigidShape, cInfo);
+          break;
+      case "RigidCircle":
+          collision = this.collidedRectCirc(this, rigidShape, cInfo);
+          break;
+  }
+  if(collision) {
+    return cInfo;
+  } else {
+    return null;
+  }
 };

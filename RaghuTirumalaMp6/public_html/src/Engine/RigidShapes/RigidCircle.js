@@ -5,7 +5,7 @@
  */
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
-/* global RigidShape */
+/* global RigidShape, vec2, vFrom1To2 */
 
 var RigidCircle = function (xf, radius) {
     RigidShape.call(this, xf);
@@ -44,4 +44,58 @@ RigidCircle.prototype.draw = function (aCamera) {
 
 RigidCircle.prototype.update = function () {
     RigidShape.prototype.update.call(this);
+};
+
+RigidCircle.prototype.collidedCircCirc = function (c1, c2, collisionInfo) {
+    var vFrom1To2 = vec2.fromValues(0,0);
+    vec2.subtract(vFrom1To2, c2.getPosition(), c1.getPosition());
+    var rSum = c1.mBoundRadius + c2.mBoundRadius;
+    var dist = vec2.length(vFrom1To2);
+    if (dist > Math.sqrt(rSum * rSum)) {
+        //not overlapping
+        return false;
+    }
+    if (dist !== 0) {
+        // overlapping but not same position
+        var normalFrom2To1 = vec2.fromValues(0,0);
+        vec2.scale(normalFrom2To1, vFrom1To2, -1);
+        vec2.normalize(normalFrom2To1, normalFrom2To1);
+        var radiusC2 = vec2.fromValues(0,0);
+        vec2.scale(radiusC2, normalFrom2To1, c2.mBoundRadius);
+        var normal1To2 = vec2.fromValues(0,0);
+        vec2.normalize(normal1To2, vFrom1To2);
+        var start = vec2.fromValues(0,0);
+        vec2.add(start, c2.getPosition(), radiusC2)
+        collisionInfo.setInfo(rSum - dist, normal1To2, start);
+    } else {
+        //same position
+        if (c1.mBoundRadius > c2.mBoundRadius) {
+            collisionInfo.setInfo(rSum, vec2.fromValues(0,-1), c1.mCenter.add(vec2.fromValues(0, c1.mBoundRadius)));
+        } else {
+            collisionInfo.setInfo(rSum, vec2.fromValues(0,-1), c2.mCenter.add(vec2.fromValues(0, c2.mBoundRadius)));
+        }
+    }
+    return true;
+};
+RigidCircle.prototype.collidedCircRect = function(rect) {
+    
+};
+
+RigidCircle.prototype.collision = function(rigidShape) {
+  var type = rigidShape.getType();
+  var cInfo = new CollisionInfo();
+  var collision = false;
+  switch(type) {
+      case "RigidRectangle":
+          collision = this.collidedCircRect(this, rigidShape, cInfo);
+          break;
+      case "RigidCircle":
+          collision = this.collidedCircCirc(this, rigidShape, cInfo);
+          break;
+  }
+  if(collision) {
+    return cInfo;
+  } else {
+    return null;
+  }
 };

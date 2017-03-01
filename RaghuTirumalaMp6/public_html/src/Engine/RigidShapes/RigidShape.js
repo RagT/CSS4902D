@@ -2,7 +2,7 @@
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
 
-/* global gEngine */
+/* global gEngine, vec2 */
 
 function RigidShape(xf) {
     this.mLine = new LineRenderable();
@@ -11,6 +11,7 @@ function RigidShape(xf) {
     this.mXform = xf;
     this.mVelocity = vec2.fromValues(0, 0);
     this.mBoundRadius = 0;
+    this.mType = null;
 }
 
 RigidShape.prototype.setBoundRadius = function(r) {
@@ -88,3 +89,12 @@ RigidShape.prototype.drawCircle = function(aCamera, r) {
         prevPoint[1] = y;
     }
 };
+
+RigidShape.prototype.getPosition = function() {
+    return this.mXform.getPosition();
+};
+
+RigidShape.prototype.getType = function() {
+    return this.mType;
+};
+

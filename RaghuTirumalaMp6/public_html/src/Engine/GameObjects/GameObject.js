@@ -14,8 +14,10 @@ function GameObject(renderableObj) {
     this.mVisible = true;
     this.mCurrentFrontDir = vec2.fromValues(0, 1);  // this is the current front direction of the object
     this.mRigidBody = null;
-    this.mDrawRenderable = true;
+    this.mDrawRenderable = false;
+    this.mSelected = false;
 }
+GameObject.prototype.setSelected = function(b) {  this.mSelected = b;  };
 GameObject.prototype.getXform = function () { return this.mRenderComponent.getXform(); };
 GameObject.prototype.getBBox = function () {
     var xform = this.getXform();
@@ -34,16 +36,13 @@ GameObject.prototype.setRigidBody = function (r) {
     this.mRigidBody = r;
 };
 GameObject.prototype.getRigidBody = function () { return this.mRigidBody; };
-GameObject.prototype.toggleDrawRenderable = function() { 
-    this.mDrawRenderable = !this.mDrawRenderable; };
+GameObject.prototype.setDrawRenderable = function(b) { 
+    this.mDrawRenderable = b; };
 
 GameObject.prototype.update = function () {
     // simple default behavior
     if (this.mRigidBody !== null)
             this.mRigidBody.update();
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.T)) {
-        this.toggleDrawRenderable();
-    }
 };
 
 GameObject.prototype.draw = function (aCamera) {

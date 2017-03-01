@@ -6,5 +6,16 @@
         <group name="CSS490Shared">
             <file>file:/C:/Users/ksungAD/Dropbox/2.Classes/490/CSS490Shared/Source/MPSolutions/MP5-KelvinSolution/public_html/index.html</file>
         </group>
+        <group>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/GameObjects/GameObject.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/CollisionInfo.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/MyGame/Objects/Hero.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/index.html</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/MyGame/MyGame.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidCircle.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidRectangle.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidShape.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/Core/Engine_Physics.js</file>
+        </group>
     </open-files>
 </project-private>

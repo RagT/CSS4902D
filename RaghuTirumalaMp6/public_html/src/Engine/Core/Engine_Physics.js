@@ -31,17 +31,19 @@ gEngine.Physics = (function () {
     var getSystemtAcceleration = function() { return mSystemtAcceleration; };
     
     var processCollision = function(set) {
+        var cInfos = [];
         var i = 0, j;
         for (i = 0; i<set.size(); i++) {
             var one = set.getObjectAt(i).getRigidBody();
             for (j = i+1; j<set.size(); j++) {
                 var g = set.getObjectAt(j).getRigidBody();
-                if (one.boundTest(g)) {
-                    one.flipVelocity();
-                    g.flipVelocity();
+                var cInfo = g.collision(one);
+                if (cInfo) {
+                    cInfos.push(cInfo);
                 }
             }
         }
+        return cInfos;
     };
     
     var mPublic = {

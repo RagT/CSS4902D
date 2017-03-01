@@ -17,8 +17,8 @@ function LineRenderable(x1, y1, x2, y2) {
     Renderable.prototype.setColor.call(this, [0, 0, 0, 1]);
     Renderable.prototype._setShader.call(this, gEngine.DefaultResources.getLineShader());
 
-    this.mPointSize = 1;
-    this.mDrawVertices = false;
+    this.mPointSize = 5;
+    this.mDrawVertices = true;
     this.mShowLine = true;
 
     this.mP1 = vec2.fromValues(0, 0);
@@ -53,7 +53,7 @@ LineRenderable.prototype.draw = function (aCamera) {
         gl.drawArrays(gl.LINE_STRIP, 0, 2);
     }
     if (!this.mShowLine || this.mdrawVertices) {
-        gl.drawArrays(gl.POINTS, 0, 2);
+        gl.drawArrays(gl.POINTS, 0, 1);
     }
 };
 

@@ -5,6 +5,8 @@
  */
 
 /*jslint node: true, vars: true, evil: true, bitwise: true */
+/* global vec2 */
+
 "use strict";
 
 /**
@@ -14,9 +16,11 @@
  */
 function CollisionInfo() {
     this.mDepth = 0;
-    this.mNormal = new Vec2(0, 0);
-    this.mStart = new Vec2(0, 0);
-    this.mEnd = new Vec2(0, 0);
+    this.mNormal = vec2.fromValues(0, 0);
+    this.mStart = vec2.fromValues(0, 0);
+    this.mEnd = vec2.fromValues(0, 0);
+    this.mLine = new LineRenderable(0, 0, 0, 0);
+    this.mLine.setColor([1, 0, 1, 1]);
 }
 
 /**
@@ -69,7 +73,10 @@ CollisionInfo.prototype.setInfo = function (d, n, s) {
     this.mDepth = d;
     this.mNormal = n;
     this.mStart = s;
-    this.mEnd = s.add(n.scale(d));
+    var scaleN = vec2.fromValues(0,0);
+    vec2.scale(scaleN, n, d);
+    vec2.add(this.mEnd, s, scaleN);
+    this.mLine.setVertices(this.mStart[0], this.mStart[1], this.mEnd[0], this.mEnd[1]);
 };
 
 /**
@@ -78,8 +85,17 @@ CollisionInfo.prototype.setInfo = function (d, n, s) {
  * @returns {void}
  */
 CollisionInfo.prototype.changeDir = function () {
-    this.mNormal = this.mNormal.scale(-1);
+    vec2.scale(this.mNormal, this.mNormal, -1);
     var n = this.mStart;
     this.mStart = this.mEnd;
     this.mEnd = n;
+};
+
+/**
+ * Draw 
+ * @camera Camera to draw line with
+ * @returns {void}
+ */
+CollisionInfo.prototype.draw = function(camera) {
+    this.mLine.draw(camera);
 };
