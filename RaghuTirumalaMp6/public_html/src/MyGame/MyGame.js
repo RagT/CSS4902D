@@ -84,10 +84,13 @@ MyGame.prototype.increaseBound = function(delta) {
 MyGame.kBoundDelta = 0.1;
 MyGame.prototype.update = function () {
     this.cInfos = gEngine.Physics.processCollision(this.mAllObjs);
+    
+    //Debug code: see all collision infos on console
     if(Date.now() - this.timer > 3000) {
         console.log(this.cInfos);
         this.timer = Date.now();
     }
+    
     var msg = "Num: " + this.mAllObjs.size() + " Current=" + this.mCurrentObj;   
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Right)) {
         this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(false);
