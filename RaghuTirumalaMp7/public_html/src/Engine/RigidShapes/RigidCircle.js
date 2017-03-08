@@ -5,7 +5,7 @@
  */
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
-/* global RigidShape */
+/* global RigidShape, vec2 */
 
 var RigidCircle = function (xf, radius, mass, friction, restitution) {
     RigidShape.call(this, xf, mass, friction, restitution);
@@ -49,4 +49,15 @@ RigidCircle.prototype.draw = function (aCamera) {
 
 RigidCircle.prototype.update = function () {
     RigidShape.prototype.update.call(this);
+};
+
+RigidCircle.prototype.updateInertia = function () {
+    if ((1 /this.mMass) === 0) {
+        this.mInertia = 0;
+    } else {
+        // this.mInvMass is inverted!!
+        // Inertia=mass * radius^2
+        // 12 is a constant value that can be changed
+        this.mInertia = this.mMass * (this.mRadius * this.mRadius) / 12;
+    }
 };

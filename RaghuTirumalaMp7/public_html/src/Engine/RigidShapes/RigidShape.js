@@ -2,12 +2,40 @@
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
 
-/* global gEngine */
+/* global gEngine, vec2 */
 
 function RigidShape(xf, mass, friction, restitution) {
-    this.mMass = mass;
-    this.mFriction = friction;
-    this.mRestitution = restitution;
+    this.mInertia = 0;
+    if(mass !== undefined) {
+        this.mMass = mass;
+    } else {
+        this.mMass = 1;
+    }
+    
+    if(friction !== undefined) {
+        this.mFriction = friction;
+    } else {
+        this.mFriction = 0.8;
+    }
+    
+    if(restitution !== undefined) {
+        this.mRestitution = restitution;
+    } else {
+        this.mRestitution = 0.2;
+    }
+    
+    if( this.mMass !== 0) {
+        this.mAcceleration = gEngine.Core.mGravity;
+    } else {
+        this.mAcceleration = vec2.fromValues(0,0);
+    }
+    //angle
+    this.mAngle = 0;
+    //negative: clockwise
+    //positive: counter-clockwise
+    
+    this.mAngularVelocity = 0;
+    this.mAngularAcceleration = 0;
     
     this.mLine = new LineRenderable();
     this.mLine.setColor([1, 1, 1, 1]);
@@ -19,12 +47,17 @@ function RigidShape(xf, mass, friction, restitution) {
     this.mDrawBounds = true;
 }
 
-RigidShape.prototype.incMassBy = function(dt) {
-    this.mMass += dt;
+RigidShape.prototype.incMassBy = function(delta) {
+    this.mMass += delta;
+    this.updateInertia();
 };
 
 RigidShape.prototype.getMass = function() {
     return this.mMass;
+};
+
+RigidShape.prototype.getInvMass = function() {
+    return 1 / this.mMass;
 };
 
 RigidShape.prototype.getFriction = function() {
@@ -41,6 +74,14 @@ RigidShape.prototype.getRestitution = function() {
 
 RigidShape.prototype.setRestitution = function(restitution) {
     this.mRestitution = restitution;
+};
+
+RigidShape.prototype.getAngle = function() {
+    return this.mAngle;
+};
+
+RigidShape.prototype.incAngleBy = function(delta) {
+    this.mAngle += delta;
 };
 
 RigidShape.prototype.toggleDrawBound = function() {
@@ -72,10 +113,20 @@ RigidShape.prototype.travel = function(dt) {};
 
 RigidShape.prototype.update = function () {
     var dt = gEngine.GameLoop.getUpdateIntervalInSeconds();
+    // v += a*t
+    var scaleAccel = vec2.scale(this.mAcceleration, dt);
+    vec2.add(this.mVelocity, this.mVelocity, scaleAccel);
     //s += v*t 
-    this.travel(dt);
+    var scaleVelocity = vec2.scale(this.mVelocity, dt);
+    
+    this.travel(scaleVelocity);
+    this.mAngularVelocity += this.mAngularAcceleration * dt;
+    this.rotate(this.mAngularVelocity * dt);
 };
 
+RigidShape.prototype.rotate = function(degree) {
+    this.mXform.incRotationByDegree(degree);
+};
 
 RigidShape.prototype.boundTest = function (otherShape) {
     var vFrom1to2 = [0, 0];
