@@ -9,13 +9,11 @@
         <group>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/GameObjects/GameObject.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/CollisionInfo.js</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/MyGame/Objects/Hero.js</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/index.html</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/MyGame/MyGame.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidCircle.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/lib/gl-matrix.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidRectangle.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/RigidShapes/RigidShape.js</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp6/public_html/src/Engine/Core/Engine_Physics.js</file>
         </group>
     </open-files>
 </project-private>
