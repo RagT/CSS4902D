@@ -17,6 +17,7 @@ var Rectangle = function(spriteTexture, xLoc, yLoc, isWall, width, height) {
         this.renderable.getXform().setSize(width, height);
     }
     RigidObject.call(this, this.renderable);
+    
     var r = new RigidRectangle(this.getXform(), width, height);
     this.setRigidBody(r);
     this.toggleDrawRenderable();

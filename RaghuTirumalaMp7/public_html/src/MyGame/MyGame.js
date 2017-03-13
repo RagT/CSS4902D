@@ -15,15 +15,16 @@ function MyGame() {
     this.kMinionSprite = "assets/minion_sprite.png";
     this.kWallSprite = "assets/Dark_brown.png";
     this.kPlatformSprite = "assets/platform.png";
+    this.kTargetSprite = "assets/target.png";
     
     // The camera to view the scene
     this.mCamera = null;
-
-    this.mMsg = null;
+    
+    this.mTopMsg = null;
+    this.mBottomMsg = null;
     this.drawRenderables = false;
     this.mAllObjs = null;
     this.mCollisionInfos = [];
-    
     this.mCurrentObj = 0;
 }
 gEngine.Core.inheritPrototype(MyGame, Scene);
@@ -33,12 +34,14 @@ MyGame.prototype.loadScene = function () {
     gEngine.Textures.loadTexture(this.kMinionSprite);
     gEngine.Textures.loadTexture(this.kWallSprite);
     gEngine.Textures.loadTexture(this.kPlatformSprite);
+    gEngine.Textures.loadTexture(this.kTargetSprite);
 };
 
 MyGame.prototype.unloadScene = function () {
     gEngine.Textures.unloadTexture(this.kMinionSprite);
     gEngine.Textures.unloadTexture(this.kWallSprite);
     gEngine.Textures.unloadTexture(this.kPlatformSprite);
+    gEngine.Textures.unloadTexture(this.kTargetSprite);
 };
 
 MyGame.prototype.initialize = function () {
@@ -79,11 +82,23 @@ MyGame.prototype.initialize = function () {
         platform.getRigidBody().setInvMass(0);
         this.mAllObjs.addToSet(platform);
     }
-
-    this.mMsg = new FontRenderable("Status Message");
-    this.mMsg.setColor([0, 0, 0, 1]);
-    this.mMsg.getXform().setPosition(2, 5);
-    this.mMsg.setTextHeight(3);
+    
+    //Inject one object in for a start
+    var c = new Circle(this.kMinionSprite, 15, 60);
+    this.mAllObjs.addToSet(c);
+    
+    this.mCurrentObj = 8;
+    this.mAllObjs.getObjectAt(8).setSelected(true);
+    
+    this.mBottomMsg = new FontRenderable("Status Message");
+    this.mBottomMsg.setColor([0, 0, 0, 1]);
+    this.mBottomMsg.getXform().setPosition(6, 5);
+    this.mBottomMsg.setTextHeight(3);
+    
+    this.mTopMsg = new FontRenderable("Status Message");
+    this.mTopMsg.setColor([0,0,0,1]);
+    this.mTopMsg.getXform().setPosition(6, 70);
+    this.mTopMsg.setTextHeight(3);
 };
 
 // This is the draw function, make sure to setup proper drawing environment, and more
@@ -101,12 +116,8 @@ MyGame.prototype.draw = function () {
         //this.mCollisionInfos[i].draw(this.mCamera);
     this.mCollisionInfos = [];
     
-    this.mMsg.draw(this.mCamera);   // only draw status in the main camera
-};
-
-MyGame.prototype.increasShapeSize = function(obj, delta) {
-    var s = obj.getRigidBody();
-    var r = s.incShapeSizeBy(delta);
+    this.mBottomMsg.draw(this.mCamera);   // only draw status in the main camera
+    this.mTopMsg.draw(this.mCamera);
 };
 
 // The Update function, updates the application state. Make sure to _NOT_ draw
@@ -114,14 +125,32 @@ MyGame.prototype.increasShapeSize = function(obj, delta) {
 MyGame.kBoundDelta = 0.1;
 MyGame.prototype.update = function () {      
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Right)) {
-
+        this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(false);
+        this.mCurrentObj++;
+        if(this.mCurrentObj >= this.mAllObjs.size()) {
+            this.mCurrentObj = 8;
+        }
+        this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(true);
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.Left)) {
-
+        this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(false);
+        this.mCurrentObj --;
+        if(this.mCurrentObj < 8) {
+            this.mCurrentObj = 8;
+        }
+        this.mAllObjs.getObjectAt(this.mCurrentObj).setSelected(true);
     }
-    var obj = this.mAllObjs.getObjectAt(this.mCurrentObj);
-    if (gEngine.Input.isKeyPressed(gEngine.Input.keys.Up)) {
-;
+    var obj = this.mAllObjs.getObjectAt(this.mCurrentObj).getRigidBody();
+
+    this.mTopMsg.setText("M=" + obj.getMass().toPrecision(3) + "(I=" + obj.getInertia().toPrecision(3) + ") " +
+                         "F=" + obj.getFriction().toPrecision(3) + " R=" + obj.getRestitution().toPrecision(3));
+    this.mBottomMsg.setText("P(" + gEngine.Physics.mPositionalCorrectionFlag +  " " + (this.mCurrentObj - 8) +")" +
+            "V(" + gEngine.Physics.mMovement + ")");
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.P)) {
+        gEngine.Physics.mPositionalCorrectionFlag = !gEngine.Physics.mPositionalCorrectionFlag;
+    }
+    if(gEngine.Input.isKeyClicked(gEngine.Input.keys.V)) {
+        gEngine.Physics.mMovement = !gEngine.Physics.mMovement;
     }
     if (gEngine.Input.isKeyClicked(gEngine.Input.keys.T)) {
         this.drawRenderables = !this.drawRenderables;

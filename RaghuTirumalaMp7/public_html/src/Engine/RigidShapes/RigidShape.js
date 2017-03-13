@@ -38,8 +38,10 @@ RigidShape.prototype.setInvMass = function(invMass) {
 
 RigidShape.prototype.incMassBy = function(delta) {
     var newMass = this.getMass() + delta;
-    this.mInvMass = 1 / newMass;
-    this.updateInertia();
+    if(newMass > 0) {
+        this.mInvMass = 1 / newMass;
+        this.updateInertia();
+    }
 };
 
 RigidShape.prototype.getMass = function() {
@@ -58,6 +60,12 @@ RigidShape.prototype.getFriction = function() {
     return this.mFriction;
 };
 
+RigidShape.prototype.incFrictionBy = function(amount) {
+    if(this.mFriction + amount >= 0) {
+        this.mFriction += amount;
+    }
+};
+
 RigidShape.prototype.setFriction = function(friction) {
     this.mFriction = friction;
 };
@@ -70,6 +78,11 @@ RigidShape.prototype.setRestitution = function(restitution) {
     this.mRestitution = restitution;
 };
 
+RigidShape.prototype.incRestitutionBy = function(amount) {
+    if(this.mRestitution + amount >= 0) {
+        this.mRestitution += amount;
+    }
+};
 RigidShape.prototype.getAngle = function() {
     return this.mAngle;
 };
@@ -121,7 +134,7 @@ RigidShape.prototype.setAngularVelocity = function(radAngle) {
 };
 
 RigidShape.prototype.update = function () {
-    if(this.mInvMass !== 0) { 
+    if(this.mInvMass !== 0 && gEngine.Physics.mMovement) { 
         this.updateInertia();
         var dt = gEngine.GameLoop.getUpdateIntervalInSeconds();
         // v += a*t
@@ -131,7 +144,7 @@ RigidShape.prototype.update = function () {
         //s += v*t 
         var scaleVelocity = vec2.fromValues(0,0);
         vec2.scale(scaleVelocity, this.mVelocity, dt);
-
+        
         this.move(scaleVelocity);
         this.mAngularVelocity += (this.mAngularAcceleration * dt);
         this.rotate(this.mAngularVelocity * dt);

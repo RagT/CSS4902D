@@ -29,6 +29,7 @@ gEngine.Physics = (function () {
     var mPositionalCorrectionFlag = true;
     var mRelaxationCount = 15;                  // number of relaxation iteration
     var mPosCorrectionRate = 0.1;               // percentage of separation to project objects
+    var mMovement = true;
     
     var getSystemtAcceleration = function() { return vec2.fromValues(0, -20); };
     
@@ -193,7 +194,8 @@ gEngine.Physics = (function () {
     var mPublic = {
         getSystemAcceleration: getSystemtAcceleration,
         processCollision: processCollision,
-        mPositionalCorrectionFlag: mPositionalCorrectionFlag
+        mPositionalCorrectionFlag: mPositionalCorrectionFlag,
+        mMovement: mMovement
     };
     return mPublic;
 }());
