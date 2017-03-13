@@ -13,11 +13,11 @@
         </group>
         <group>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/Engine/RigidShapes/RigidShape.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/MyGame/Objects/Rectangle.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/Engine/Core/Engine_Physics.js</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/MyGame/Objects/Hero.js</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/index.html</file>
-            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/MyGame/Objects/WASDObj.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/MyGame/Objects/Circle.js</file>
             <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/lib/gl-matrix.js</file>
+            <file>file:/Users/varadantirumala/Documents/CSS4902D/RaghuTirumalaMp7/public_html/src/MyGame/MyGame.js</file>
         </group>
     </open-files>
 </project-private>

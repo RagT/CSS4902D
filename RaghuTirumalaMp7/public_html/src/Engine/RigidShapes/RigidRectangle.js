@@ -16,6 +16,7 @@ var RigidRectangle = function (xf, width, height) {
     this.mVertex = [];
     this.mFaceNormal = [];
     
+    this.mDrawBounds = false;
     this.setVertices();
     this.computeFaceNormals();
 };
@@ -81,20 +82,22 @@ RigidRectangle.prototype.rotate = function(angle) {
 };
 
 RigidRectangle.kBoundColor = [
-    [1, 1, 0, 1],
-    [1, 0, 0, 1],
-    [0, 0, 1, 1],
-    [0, 1, 1, 1]
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+    [0, 0, 0, 1]
 ];
 RigidRectangle.prototype.drawAnEdge = function (i1, i2, aCamera) {
     this.mLine.setColor(RigidRectangle.kBoundColor[i1]);
     this.mLine.setFirstVertex(this.mVertex[i1][0], this.mVertex[i1][1]);  
     this.mLine.setSecondVertex(this.mVertex[i2][0], this.mVertex[i2][1]); 
     this.mLine.draw(aCamera);
+    /*
     var n = [3*this.mFaceNormal[i1][0], 3*this.mFaceNormal[i1][1]];
     vec2.add(n, this.mVertex[i1], n);
     this.mLine.setSecondVertex(n[0], n[1]); 
     this.mLine.draw(aCamera);
+    */
 };
 
 RigidRectangle.prototype.draw = function (aCamera) {
@@ -119,7 +122,7 @@ RigidRectangle.prototype.updateInertia = function () {
         this.mInertia = 0;
     } else {
         //inertia=mass*width^2+height^2
-        this.mInertia = this.mMass * (this.mWidth * this.mWidth + this.mHeight * this.mHeight) / 12;
+        this.mInertia = (1 / this.mInvMass) * (this.mWidth * this.mWidth + this.mHeight * this.mHeight) / 12;
         this.mInertia = 1 / this.mInertia;
     }
 };

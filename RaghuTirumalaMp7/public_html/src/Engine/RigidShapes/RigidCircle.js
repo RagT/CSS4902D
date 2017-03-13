@@ -59,12 +59,12 @@ RigidCircle.prototype.update = function () {
 };
 
 RigidCircle.prototype.updateInertia = function () {
-    if (this.mInvMass = 0) {
+    if (this.mInvMass === 0) {
         this.mInertia = 0;
     } else {
         // this.mInvMass is inverted!!
         // Inertia=mass * radius^2
         // 12 is a constant value that can be changed
-        this.mInertia = this.mMass * (this.mRadius * this.mRadius) / 12;
+        this.mInertia = (1 / this.mInvMass) * (this.mRadius * this.mRadius) / 12;
     }
 };

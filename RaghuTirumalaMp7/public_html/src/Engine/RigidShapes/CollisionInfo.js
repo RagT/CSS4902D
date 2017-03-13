@@ -5,6 +5,8 @@
  */
 
 /*jslint node: true, vars: true, evil: true, bitwise: true */
+/* global vec2 */
+
 "use strict";
 
 /**
@@ -72,8 +74,10 @@ CollisionInfo.prototype.getNormal = function () {
  */
 CollisionInfo.prototype.setInfo = function (d, n, s) {
     this.mDepth = d;
-    this.mNormal = n;
-    this.mStart = s;
+    this.mNormal[0] = n[0];
+    this.mNormal[1] = n[1];
+    this.mStart[0] = s[0];
+    this.mStart[1] = s[1];
     vec2.scaleAndAdd(this.mEnd, s, n, d);
 };
 
@@ -93,4 +97,12 @@ CollisionInfo.prototype.draw = function(aCamera) {
     this.mLine.setFirstVertex(this.mStart[0], this.mStart[1]);
     this.mLine.setSecondVertex(this.mEnd[0], this.mEnd[1]);
     this.mLine.draw(aCamera);
+};
+
+CollisionInfo.prototype.getStart = function() {
+    return this.mStart;
+};
+
+CollisionInfo.prototype.getEnd = function() {
+    return this.mEnd;
 };

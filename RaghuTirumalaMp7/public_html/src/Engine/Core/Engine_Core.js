@@ -80,7 +80,9 @@ gEngine.Core = (function () {
     };
     // -- end of public methods
     
-    var mGravity = vec2.fromValues(0,1);
+    var getRandomInRange = function(min, max) {
+        return Math.random() * (max - min) + min;
+    }
     
     var mPublic = {
         getGL: getGL,
@@ -89,7 +91,7 @@ gEngine.Core = (function () {
         inheritPrototype: inheritPrototype,
         startScene: startScene,
         cleanUp: cleanUp,
-        mGravity: mGravity
+        getRandomInRange: getRandomInRange
     };
 
     return mPublic;

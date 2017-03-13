@@ -36,18 +36,13 @@ GameObject.prototype.setRigidBody = function (r) {
 GameObject.prototype.getRigidBody = function () { return this.mRigidBody; };
 GameObject.prototype.toggleDrawRenderable = function() { 
     this.mDrawRenderable = !this.mDrawRenderable; };
-
+GameObject.prototype.setDrawRenderable = function(b) {
+    this.mDrawRenderable = b;
+};
 GameObject.prototype.update = function () {
     // simple default behavior
     if (this.mRigidBody !== null)
             this.mRigidBody.update();
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.T)) {
-        this.toggleDrawRenderable();
-    }
-    if (gEngine.Input.isKeyClicked(gEngine.Input.keys.B)) {
-        if (this.mRigidBody !== null)
-            this.mRigidBody.toggleDrawBound();
-    }
 };
 
 GameObject.prototype.draw = function (aCamera) {
