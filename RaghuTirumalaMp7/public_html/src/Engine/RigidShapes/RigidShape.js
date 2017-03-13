@@ -4,60 +4,41 @@
 
 /* global gEngine, vec2 */
 
-function RigidShape(xf, mass, friction, restitution) {
+function RigidShape(xf) {
     this.mInertia = 0;
-    if(mass !== undefined) {
-        this.mMass = mass;
-    } else {
-        this.mMass = 1;
-    }
     
-    if(friction !== undefined) {
-        this.mFriction = friction;
-    } else {
-        this.mFriction = 0.8;
-    }
-    
-    if(restitution !== undefined) {
-        this.mRestitution = restitution;
-    } else {
-        this.mRestitution = 0.2;
-    }
-    
-    if( this.mMass !== 0) {
-        this.mAcceleration = gEngine.Core.mGravity;
-    } else {
-        this.mAcceleration = vec2.fromValues(0,0);
-    }
-    //angle
+    //properties
+    this.mInvMass = 1;
     this.mAngle = 0;
-    //negative: clockwise
-    //positive: counter-clockwise
-    
-    this.mAngularVelocity = 0;
+    this.mRestitution = 0.8;
+    this.mAngularVelocity = 0.05;
     this.mAngularAcceleration = 0;
+    this.mVelocity = vec2.fromValues(0,0);
+    this.mInertia = 0;
+    this.mFriction = 0.2;
+    this.mAcceleration = gEngine.Physics.getSystemAcceleration();
     
     this.mLine = new LineRenderable();
     this.mLine.setColor([1, 1, 1, 1]);
     
     this.mXform = xf;
-    this.mVelocity = vec2.fromValues(0, 0);
     this.mBoundRadius = 0;
     
     this.mDrawBounds = true;
 }
 
 RigidShape.prototype.incMassBy = function(delta) {
-    this.mMass += delta;
+    var newMass = this.getMass() + delta;
+    this.mInvMass = 1 / newMass;
     this.updateInertia();
 };
 
 RigidShape.prototype.getMass = function() {
-    return this.mMass;
+    return 1 / this.mInvMass;
 };
 
 RigidShape.prototype.getInvMass = function() {
-    return 1 / this.mMass;
+    return this.mInvMass;
 };
 
 RigidShape.prototype.getFriction = function() {
@@ -109,23 +90,19 @@ RigidShape.prototype.flipVelocity = function() {
     this.mVelocity[1] = -this.mVelocity[1];
 };
 
-RigidShape.prototype.travel = function(dt) {};
-
 RigidShape.prototype.update = function () {
     var dt = gEngine.GameLoop.getUpdateIntervalInSeconds();
     // v += a*t
-    var scaleAccel = vec2.scale(this.mAcceleration, dt);
+    var scaleAccel = vec2.fromValues(0,0);
+    vec2.scale(scaleAccel, this.mAcceleration, dt);
     vec2.add(this.mVelocity, this.mVelocity, scaleAccel);
     //s += v*t 
-    var scaleVelocity = vec2.scale(this.mVelocity, dt);
+    var scaleVelocity = vec2.fromValues(0,0);
+    vec2.scale(scaleVelocity, this.mVelocity, dt);
     
-    this.travel(scaleVelocity);
-    this.mAngularVelocity += this.mAngularAcceleration * dt;
+    this.move(scaleVelocity);
+    this.mAngularVelocity += (this.mAngularAcceleration * dt);
     this.rotate(this.mAngularVelocity * dt);
-};
-
-RigidShape.prototype.rotate = function(degree) {
-    this.mXform.incRotationByDegree(degree);
 };
 
 RigidShape.prototype.boundTest = function (otherShape) {
@@ -143,7 +120,6 @@ RigidShape.prototype.boundTest = function (otherShape) {
 RigidShape.prototype.draw = function(aCamera) {
     if (!this.mDrawBounds)
         return;
-    
     var len = this.mBoundRadius * 0.5;
     //calculation for the X at the center of the shape
     var x = this.mXform.getXPos();

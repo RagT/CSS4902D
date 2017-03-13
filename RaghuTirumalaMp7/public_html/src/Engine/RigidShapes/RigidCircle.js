@@ -5,10 +5,10 @@
  */
 /*jslint node: true, vars: true, evil: true, bitwise: true */
 "use strict";
-/* global RigidShape, vec2 */
+/* global RigidShape, vec2, gEngine */
 
-var RigidCircle = function (xf, radius, mass, friction, restitution) {
-    RigidShape.call(this, xf, mass, friction, restitution);
+var RigidCircle = function (xf, radius) {
+    RigidShape.call(this, xf);
     this.mType = "RigidCircle";
     this.mRadius = radius;
     this.mBoundRadius = radius;
@@ -19,11 +19,18 @@ RigidCircle.prototype.incShapeSizeBy= function (dt) {
     this.mRadius += dt;
 };
 
-RigidCircle.prototype.travel = function (dt) {
-    // linear motion
-    var p = this.mXform.getPosition();
-    vec2.scaleAndAdd(p, p, this.mVelocity, dt);
-    
+RigidCircle.prototype.move = function(vector) {
+    var pos = this.mXform.getPosition();
+    vec2.add(pos, pos, vector);
+    return this;
+};
+
+RigidCircle.prototype.rotate = function(angle) {
+    this.mAngle += angle;
+    var center = this.mXform.getPosition();
+    this.mXform.setRotationInRad(this.mAngle);
+    var radianAngle = this.mXform.getRotationInRad();
+    vec2.rotateWRT(center, center, radianAngle, center);
     return this;
 };
 
@@ -52,7 +59,7 @@ RigidCircle.prototype.update = function () {
 };
 
 RigidCircle.prototype.updateInertia = function () {
-    if ((1 /this.mMass) === 0) {
+    if (this.mInvMass = 0) {
         this.mInertia = 0;
     } else {
         // this.mInvMass is inverted!!

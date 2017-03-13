@@ -17,6 +17,7 @@ gEngine.Core = (function () {
     // instance variables
     // The graphical context to draw to
     var mGL = null;
+    
     // initialize the WebGL, the vertex buffer and compile the shaders
     var _initializeWebGL = function (htmlCanvasID) {
         var canvas = document.getElementById(htmlCanvasID);
@@ -78,14 +79,17 @@ gEngine.Core = (function () {
         gEngine.VertexBuffer.cleanUp();
     };
     // -- end of public methods
-
+    
+    var mGravity = vec2.fromValues(0,1);
+    
     var mPublic = {
         getGL: getGL,
         initializeEngineCore: initializeEngineCore,
         clearCanvas: clearCanvas,
         inheritPrototype: inheritPrototype,
         startScene: startScene,
-        cleanUp: cleanUp
+        cleanUp: cleanUp,
+        mGravity: mGravity
     };
 
     return mPublic;

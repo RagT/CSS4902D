@@ -26,9 +26,8 @@ var gEngine = gEngine || { };
  */
 gEngine.Physics = (function () {
 
-    var mSystemtAcceleration = [0, -20];        // system-wide default acceleration
     
-    var getSystemtAcceleration = function() { return mSystemtAcceleration; };
+    var getSystemtAcceleration = function() { return vec2.fromValues(0, -9.81); };
     
     var processCollision = function(set, infoSet) {
         var i = 0, j;
