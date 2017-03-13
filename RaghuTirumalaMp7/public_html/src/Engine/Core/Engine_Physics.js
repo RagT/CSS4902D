@@ -28,7 +28,7 @@ gEngine.Physics = (function () {
 
     var mPositionalCorrectionFlag = true;
     var mRelaxationCount = 15;                  // number of relaxation iteration
-    var mPosCorrectionRate = 0.8;               // percentage of separation to project objects
+    var mPosCorrectionRate = 0.1;               // percentage of separation to project objects
     
     var getSystemtAcceleration = function() { return vec2.fromValues(0, -20); };
     
@@ -97,8 +97,8 @@ gEngine.Physics = (function () {
         }
         
         // compute and apply response impulses for each object    
-        var newRestituion = Math.min(s1.mRestitution, s2.mRestitution);
-        var newFriction = Math.min(s1.mFriction, s2.mFriction);
+        var newRestituion = Math.min(s1.getRestitution(), s2.getRestitution());
+        var newFriction = Math.min(s1.getFriction(), s2.getFriction());
 
         //R cross N
         var R1crossN = cross(r1, n);
@@ -122,8 +122,8 @@ gEngine.Physics = (function () {
         vec2.scale(scaleImpulse, impulse, s2.getInvMass());
         s2.incVelocityBy(scaleImpulse);
         
-        s1.incAngularVelocity(-1 * R1crossN * jN * s1.getInertia());
-        s2.incAngularVelocity(R2crossN * jN * s2.getInertia());
+        s1.incAngularVelocity(-1 * R1crossN * jN * s1.getInertia() * (Math.PI / 180));
+        s2.incAngularVelocity(R2crossN * jN * s2.getInertia() * (Math.PI / 180));
 
         
         var tangent = vec2.fromValues(0,0);
@@ -157,8 +157,8 @@ gEngine.Physics = (function () {
         s1.incVelocityBy(impulseS1);
         s2.incVelocityBy(impulseS2);
         
-        s1.incAngularVelocity(-1 * R1crossT * jT * s1.getInertia());
-        s2.incAngularVelocity(R2crossT * jT * s2.getInertia());
+        s1.incAngularVelocity(-1 * R1crossT * jT * s1.getInertia() * (Math.PI / 180));
+        s2.incAngularVelocity(R2crossT * jT * s2.getInertia() * (Math.PI / 180));
         
     };
     
